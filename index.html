@@ -340,6 +340,39 @@
             font-size: 0.9rem;
         }
 
+        /* ===== RODAPÉ ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px 10px 20px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            margin-top: 30px;
+        }
+        .footer .credit {
+            font-size: 0.85rem;
+            color: #6c7a8a;
+            font-weight: 400;
+        }
+        .footer .credit a {
+            color: #f5c518;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .footer .credit a:hover {
+            border-bottom-color: #f5c518;
+        }
+        .footer .sub {
+            font-size: 0.7rem;
+            color: #8899aa;
+            margin-top: 4px;
+            opacity: 0.6;
+        }
+        .footer .sub i {
+            color: #f5c518;
+            font-size: 0.6rem;
+        }
+
         /* ===== RESPONSIVO ===== */
         @media (max-width: 768px) {
             .header { padding: 16px 18px; }
@@ -455,6 +488,23 @@
             <div id="scorersList" class="scorers-grid"></div>
         </div>
     </div>
+
+    <!-- ===== RODAPÉ ===== -->
+    <footer class="footer">
+        <p class="credit">
+            Desenvolvido por 
+            <a href="https://www.instagram.com/elijunio_m?igsi=MTlmem94eWRrajg2Mg%3D%3D&utm_source=qr" 
+               target="_blank">
+                © Elijunio_M
+            </a>
+            <span style="color: #6c7a8a; font-weight: 300;">·</span>
+            <span style="color: #6c7a8a; font-size: 0.75rem;">Todos os direitos reservados</span>
+        </p>
+        <p class="sub">
+            <i class="fas fa-code"></i> 
+            Desenvolvido com ❤️ para a comunidade
+        </p>
+    </footer>
 
 </div>
 

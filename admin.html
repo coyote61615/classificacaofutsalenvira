@@ -57,6 +57,7 @@
             cursor: pointer;
             background: #4CAF50;
             color: #fff;
+            transition: 0.2s;
         }
         .login-box .btn:hover { background: #2E7D32; }
         .login-error { color: #e74c3c; font-size: 0.9rem; margin-top: 10px; display: none; }
@@ -209,6 +210,29 @@
         .card-item-admin .card-type.amarillo { background: #FFF8E1; color: #f39c12; border: 1px solid #f39c12; }
         .card-item-admin .card-type.vermelho { background: #FFEBEE; color: #e74c3c; border: 1px solid #e74c3c; }
 
+        /* ===== RODAPÉ ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px 10px 20px;
+            border-top: 1px solid rgba(255, 215, 0, 0.15);
+            margin-top: 30px;
+        }
+        .footer .credit {
+            font-size: 0.8rem;
+            color: #6c7a8a;
+            font-weight: 400;
+        }
+        .footer .credit a {
+            color: #f5c518;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .footer .credit a:hover {
+            border-bottom-color: #f5c518;
+        }
+
         @media (max-width: 600px) {
             .login-box { padding: 24px; margin: 40px auto; }
             .admin-header { padding: 14px 18px; }
@@ -229,7 +253,7 @@
             <h2>Acesso Administrativo</h2>
             <p>Digite suas credenciais para gerenciar o campeonato</p>
             <input type="text" id="loginUser" placeholder="Usuário" value="admin" />
-            <input type="password" id="loginPass" placeholder="Senha" value="admin" />
+            <input type="password" id="loginPass" placeholder="Senha" value="" />
             <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Entrar</button>
             <div class="login-error" id="loginError">Usuário ou senha inválidos!</div>
         </div>
@@ -354,8 +378,23 @@
             <div class="form-actions">
                 <button class="btn btn-danger" id="resetBtn"><i class="fas fa-undo-alt"></i> Resetar Todos os Dados</button>
                 <button class="btn btn-outline" id="refreshBtn"><i class="fas fa-sync-alt"></i> Recarregar Dados</button>
+                <button class="btn btn-success" id="forceRefreshBtn"><i class="fas fa-sync-alt"></i> Forçar Recarga</button>
             </div>
         </div>
+
+        <!-- ===== RODAPÉ ===== -->
+        <footer class="footer">
+            <p class="credit">
+                Desenvolvido por 
+                <a href="https://www.instagram.com/elijunio_m?igsi=MTlmem94eWRrajg2Mg%3D%3D&utm_source=qr" 
+                   target="_blank">
+                    © Elijunio_M
+                </a>
+                <span style="color: #6c7a8a; font-weight: 300;">·</span>
+                <span style="color: #6c7a8a; font-size: 0.7rem;">Painel Administrativo</span>
+            </p>
+        </footer>
+
     </div>
 </div>
 
@@ -392,8 +431,46 @@
     };
 
     // ================================================================
-    //  FUNÇÕES AUXILIARES
+    //  ⚠️ CONFIGURAÇÃO DE SEGURANÇA ⚠️
+    //  COLOQUE A SENHA QUE VOCÊ QUISER ABAIXO
     // ================================================================
+    const ADMIN_USER = 'admin';
+    const ADMIN_PASSWORD = ''; // ⚠️ COLOQUE SUA SENHA AQUI! Ex: 'Campeonato2026'
+
+    // ================================================================
+    //  FUNÇÕES DE SEGURANÇA - SANITIZAÇÃO
+    // ================================================================
+    
+    function checkSession() {
+        const auth = sessionStorage.getItem('admin_auth');
+        if (auth !== 'true') {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            return false;
+        }
+        return true;
+    }
+
+    function sanitizeString(str) {
+        if (!str) return '';
+        return str
+            .replace(/[<>]/g, '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .trim()
+            .substring(0, 100);
+    }
+
+    function sanitizeNumber(value) {
+        const num = parseInt(value);
+        return isNaN(num) ? 0 : Math.max(0, Math.min(999, num));
+    }
+
+    function isValidId(id) {
+        return /^[a-zA-Z0-9_-]{1,50}$/.test(id);
+    }
+
     function generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
     }
@@ -437,40 +514,67 @@
             
             const batch = db.batch();
             
-            // Teams
             data.teams.forEach(team => {
                 const ref = db.collection('teams').doc(team.id);
-                batch.set(ref, team);
+                batch.set(ref, {
+                    id: team.id,
+                    name: sanitizeString(team.name),
+                    badge: sanitizeString(team.badge).toUpperCase(),
+                    color: team.color || '#4CAF50',
+                    logo: sanitizeString(team.logo || ''),
+                    group: team.group || 'A'
+                });
             });
             
-            // Matches
             data.matches.forEach(match => {
                 const ref = db.collection('matches').doc(match.id);
-                batch.set(ref, match);
+                batch.set(ref, {
+                    id: match.id,
+                    homeTeamId: match.homeTeamId,
+                    awayTeamId: match.awayTeamId,
+                    homeGoals: sanitizeNumber(match.homeGoals),
+                    awayGoals: sanitizeNumber(match.awayGoals),
+                    datetime: match.datetime || new Date().toISOString(),
+                    venue: sanitizeString(match.venue || 'Estádio Municipal'),
+                    played: !!match.played,
+                    live: !!match.live,
+                    lastUpdate: match.lastUpdate || null
+                });
             });
             
-            // Scorers
             data.scorers.forEach(scorer => {
                 const ref = db.collection('scorers').doc(scorer.id);
-                batch.set(ref, scorer);
+                batch.set(ref, {
+                    id: scorer.id,
+                    playerName: sanitizeString(scorer.playerName),
+                    teamId: scorer.teamId,
+                    goals: sanitizeNumber(scorer.goals)
+                });
             });
             
-            // Cards
             data.cards.forEach(card => {
                 const ref = db.collection('cards').doc(card.id);
-                batch.set(ref, card);
+                batch.set(ref, {
+                    id: card.id,
+                    playerName: sanitizeString(card.playerName),
+                    teamId: card.teamId,
+                    type: card.type === 'vermelho' ? 'vermelho' : 'amarelo',
+                    datetime: card.datetime || new Date().toISOString(),
+                    matchId: card.matchId || null
+                });
             });
             
-            // MataMata
             const mataMataRef = db.collection('mataMata').doc('config');
             batch.set(mataMataRef, data.mataMata);
             
-            // Config
             const configRef = db.collection('config').doc('config');
-            batch.set(configRef, data.config);
+            batch.set(configRef, {
+                prefeituraLogo: sanitizeString(data.config.prefeituraLogo || 'images/prefeitura.png'),
+                campeonatoNome: sanitizeString(data.config.campeonatoNome || 'Campeonato Municipal'),
+                temporada: sanitizeString(data.config.temporada || '2026')
+            });
             
             await batch.commit();
-            
             setStatus('online', '✅ Salvo com sucesso!');
             return true;
         } catch (error) {
@@ -545,12 +649,21 @@
     document.getElementById('loginBtn').addEventListener('click', () => {
         const user = document.getElementById('loginUser').value.trim();
         const pass = document.getElementById('loginPass').value.trim();
-        if (user === 'admin' && pass === 'admin') {
+        
+        if (user === ADMIN_USER && pass === ADMIN_PASSWORD) {
             sessionStorage.setItem('admin_auth', 'true');
             loginError.style.display = 'none';
             checkAuth();
         } else {
             loginError.style.display = 'block';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('loginPass').focus();
+        }
+    });
+
+    document.getElementById('loginPass').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('loginBtn').click();
         }
     });
 
@@ -600,7 +713,7 @@
             chip.innerHTML = `
                 <span class="color-dot" style="background:${t.color || '#2a3f52'};"></span>
                 ${t.badge} - ${t.name} (${t.group || '?'})
-                <button class="remove-btn" onclick="deleteTeam('${t.id}')">✕</button>
+                <button class="remove-btn" onclick="if(checkSession()) deleteTeam('${t.id}')">✕</button>
             `;
             container.appendChild(chip);
         });
@@ -631,7 +744,7 @@
             }
             
             const liveBadge = m.live ? '<span class="live-badge active"><i class="fas fa-circle"></i> AO VIVO</span>' : '<span class="live-badge">OFF</span>';
-            const updateBtn = m.live ? `<button class="btn btn-amarelo btn-small" onclick="updateLiveScore('${m.id}')"><i class="fas fa-sync-alt"></i></button>` : '';
+            const updateBtn = m.live ? `<button class="btn btn-amarelo btn-small" onclick="if(checkSession()) updateLiveScore('${m.id}')"><i class="fas fa-sync-alt"></i></button>` : '';
             
             tr.innerHTML = `
                 <td>${getTeamName(m.homeTeamId)}</td>
@@ -643,9 +756,9 @@
                 <td>${liveBadge}</td>
                 <td style="display:flex; gap:4px; flex-wrap:wrap;">
                     ${updateBtn}
-                    <button class="btn btn-ao-vivo ${m.live ? 'active' : ''} btn-small" onclick="toggleLive('${m.id}')">${m.live ? '⏹' : '▶'}</button>
-                    <button class="btn btn-success btn-small" onclick="toggleMatch('${m.id}')">${m.played ? '↩️' : '✅'}</button>
-                    <button class="btn btn-danger btn-small" onclick="deleteMatch('${m.id}')">✕</button>
+                    <button class="btn btn-ao-vivo ${m.live ? 'active' : ''} btn-small" onclick="if(checkSession()) toggleLive('${m.id}')">${m.live ? '⏹' : '▶'}</button>
+                    <button class="btn btn-success btn-small" onclick="if(checkSession()) toggleMatch('${m.id}')">${m.played ? '↩️' : '✅'}</button>
+                    <button class="btn btn-danger btn-small" onclick="if(checkSession()) deleteMatch('${m.id}')">✕</button>
                 </td>
             `;
             tbody.appendChild(tr);
@@ -664,7 +777,7 @@
                 <td>${s.playerName}</td>
                 <td>${getTeamName(s.teamId)}</td>
                 <td>${s.goals}</td>
-                <td><button class="btn btn-danger btn-small" onclick="deleteScorer('${s.id}')">✕</button></td>
+                <td><button class="btn btn-danger btn-small" onclick="if(checkSession()) deleteScorer('${s.id}')">✕</button></td>
             `;
             tbody.appendChild(tr);
         });
@@ -691,7 +804,7 @@
                     <span class="card-type ${card.type}">${card.type === 'amarelo' ? '🟨 Amarelo' : '🟥 Vermelho'}</span>
                     <span style="font-size:0.75rem;color:#6c7a8a;"><i class="far fa-calendar-alt"></i> ${formatDate(card.datetime)}</span>
                 </div>
-                <button class="btn btn-danger btn-small" onclick="deleteCard('${card.id}')">✕</button>
+                <button class="btn btn-danger btn-small" onclick="if(checkSession()) deleteCard('${card.id}')">✕</button>
             `;
             container.appendChild(div);
         });
@@ -706,17 +819,27 @@
     }
 
     // ================================================================
-    //  FUNÇÕES CRUD
+    //  FUNÇÕES CRUD CORRIGIDAS
     // ================================================================
+    
+    window.checkSession = checkSession;
+
+    // ===== ADICIONAR =====
     window.addTeam = async function() {
-        const name = document.getElementById('teamName').value.trim();
-        const badge = document.getElementById('teamBadge').value.trim().toUpperCase();
+        if (!checkSession()) return;
+        
+        const name = sanitizeString(document.getElementById('teamName').value);
+        const badge = sanitizeString(document.getElementById('teamBadge').value).toUpperCase();
         const color = document.getElementById('teamColor').value;
-        const logo = document.getElementById('teamLogo').value.trim() || '';
+        const logo = sanitizeString(document.getElementById('teamLogo').value.trim() || '');
         const group = document.getElementById('teamGroup').value;
         
         if (!name || !badge) {
-            alert('Preencha nome e sigla!');
+            alert('Preencha nome e sigla corretamente!');
+            return;
+        }
+        if (!/^[A-Z]{3}$/.test(badge)) {
+            alert('A sigla deve ter exatamente 3 letras maiúsculas!');
             return;
         }
         if (data.teams.find(t => t.badge === badge)) {
@@ -742,26 +865,15 @@
         }
     };
 
-    window.deleteTeam = async function(id) {
-        if (!confirm('Remover este time?')) return;
-        
-        data.teams = data.teams.filter(t => t.id !== id);
-        data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
-        data.cards = data.cards.filter(c => c.teamId !== id);
-        
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-            alert('✅ Time removido!');
-        }
-    };
-
     window.addMatch = async function(played = true) {
+        if (!checkSession()) return;
+        
         const homeId = document.getElementById('matchHome').value;
         const awayId = document.getElementById('matchAway').value;
         const homeGoalsInput = document.getElementById('matchHomeGoals').value;
         const awayGoalsInput = document.getElementById('matchAwayGoals').value;
         const datetime = document.getElementById('matchDatetime').value;
-        const venue = document.getElementById('matchVenue').value.trim() || 'Estádio Municipal';
+        const venue = sanitizeString(document.getElementById('matchVenue').value.trim() || 'Estádio Municipal');
         
         if (!homeId || !awayId || homeId === awayId) {
             alert('Selecione dois times diferentes!');
@@ -778,8 +890,8 @@
                 alert('Preencha os gols!');
                 return;
             }
-            homeGoals = parseInt(homeGoalsInput) || 0;
-            awayGoals = parseInt(awayGoalsInput) || 0;
+            homeGoals = sanitizeNumber(homeGoalsInput);
+            awayGoals = sanitizeNumber(awayGoalsInput);
         }
         
         data.matches.push({
@@ -805,95 +917,10 @@
         }
     };
 
-    window.toggleMatch = async function(id) {
-        const match = data.matches.find(m => m.id === id);
-        if (!match) return;
-        
-        if (match.played) {
-            if (match.live) {
-                alert('Pare a transmissão primeiro!');
-                return;
-            }
-            match.played = false;
-            match.homeGoals = null;
-            match.awayGoals = null;
-        } else {
-            const hg = prompt('Gols do mandante:', '0');
-            if (hg === null) return;
-            const ag = prompt('Gols do visitante:', '0');
-            if (ag === null) return;
-            match.played = true;
-            match.homeGoals = parseInt(hg) || 0;
-            match.awayGoals = parseInt(ag) || 0;
-            match.lastUpdate = new Date().toISOString();
-        }
-        
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-        }
-    };
-
-    window.toggleLive = async function(id) {
-        const match = data.matches.find(m => m.id === id);
-        if (!match) return;
-        if (!match.played) {
-            alert('Finalize o jogo primeiro!');
-            return;
-        }
-        
-        match.live = !match.live;
-        if (match.live) {
-            match.lastUpdate = new Date().toISOString();
-        } else {
-            match.lastUpdate = null;
-        }
-        
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-        }
-    };
-
-    window.updateLiveScore = async function(id) {
-        const match = data.matches.find(m => m.id === id);
-        if (!match) {
-            alert('Jogo não encontrado!');
-            return;
-        }
-        if (!match.live) {
-            alert('Este jogo não está AO VIVO.');
-            return;
-        }
-        if (!match.played) {
-            alert('Finalize o jogo primeiro.');
-            return;
-        }
-        
-        const hg = prompt(`Gols do mandante (${getTeamName(match.homeTeamId)}):`, match.homeGoals || 0);
-        if (hg === null) return;
-        const ag = prompt(`Gols do visitante (${getTeamName(match.awayTeamId)}):`, match.awayGoals || 0);
-        if (ag === null) return;
-        
-        match.homeGoals = parseInt(hg) || 0;
-        match.awayGoals = parseInt(ag) || 0;
-        match.lastUpdate = new Date().toISOString();
-        
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-            alert(`✅ Placar atualizado: ${getTeamName(match.homeTeamId)} ${match.homeGoals} x ${match.awayGoals} ${getTeamName(match.awayTeamId)}`);
-        }
-    };
-
-    window.deleteMatch = async function(id) {
-        if (!confirm('Remover este jogo?')) return;
-        
-        data.matches = data.matches.filter(m => m.id !== id);
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-        }
-    };
-
     window.addCard = async function() {
-        const playerName = document.getElementById('cardPlayerName').value.trim();
+        if (!checkSession()) return;
+        
+        const playerName = sanitizeString(document.getElementById('cardPlayerName').value);
         const teamId = document.getElementById('cardTeam').value;
         const type = document.getElementById('cardType').value;
         const datetime = document.getElementById('cardDatetime').value;
@@ -928,19 +955,12 @@
         }
     };
 
-    window.deleteCard = async function(id) {
-        if (!confirm('Remover este cartão?')) return;
-        
-        data.cards = data.cards.filter(c => c.id !== id);
-        if (await saveDataToFirebase()) {
-            renderAllAdmin();
-        }
-    };
-
     window.addScorer = async function() {
-        const name = document.getElementById('scorerName').value.trim();
+        if (!checkSession()) return;
+        
+        const name = sanitizeString(document.getElementById('scorerName').value);
         const teamId = document.getElementById('scorerTeam').value;
-        const goals = parseInt(document.getElementById('scorerGoals').value) || 0;
+        const goals = sanitizeNumber(document.getElementById('scorerGoals').value);
         
         if (!name || !teamId) {
             alert('Preencha nome e time!');
@@ -967,12 +987,203 @@
         }
     };
 
-    window.deleteScorer = async function(id) {
-        if (!confirm('Remover este artilheiro?')) return;
+    // ===== TOGGLE =====
+    window.toggleMatch = async function(id) {
+        if (!checkSession()) return;
         
-        data.scorers = data.scorers.filter(s => s.id !== id);
+        const match = data.matches.find(m => m.id === id);
+        if (!match) return;
+        
+        if (match.played) {
+            if (match.live) {
+                alert('Pare a transmissão primeiro!');
+                return;
+            }
+            match.played = false;
+            match.homeGoals = null;
+            match.awayGoals = null;
+        } else {
+            const hg = prompt('Gols do mandante:', '0');
+            if (hg === null) return;
+            const ag = prompt('Gols do visitante:', '0');
+            if (ag === null) return;
+            match.played = true;
+            match.homeGoals = sanitizeNumber(hg);
+            match.awayGoals = sanitizeNumber(ag);
+            match.lastUpdate = new Date().toISOString();
+        }
+        
         if (await saveDataToFirebase()) {
             renderAllAdmin();
+        }
+    };
+
+    window.toggleLive = async function(id) {
+        if (!checkSession()) return;
+        
+        const match = data.matches.find(m => m.id === id);
+        if (!match) return;
+        if (!match.played) {
+            alert('Finalize o jogo primeiro!');
+            return;
+        }
+        
+        match.live = !match.live;
+        if (match.live) {
+            match.lastUpdate = new Date().toISOString();
+        } else {
+            match.lastUpdate = null;
+        }
+        
+        if (await saveDataToFirebase()) {
+            renderAllAdmin();
+        }
+    };
+
+    window.updateLiveScore = async function(id) {
+        if (!checkSession()) return;
+        
+        const match = data.matches.find(m => m.id === id);
+        if (!match) {
+            alert('Jogo não encontrado!');
+            return;
+        }
+        if (!match.live) {
+            alert('Este jogo não está AO VIVO.');
+            return;
+        }
+        if (!match.played) {
+            alert('Finalize o jogo primeiro.');
+            return;
+        }
+        
+        const hg = prompt(`Gols do mandante (${getTeamName(match.homeTeamId)}):`, match.homeGoals || 0);
+        if (hg === null) return;
+        const ag = prompt(`Gols do visitante (${getTeamName(match.awayTeamId)}):`, match.awayGoals || 0);
+        if (ag === null) return;
+        
+        match.homeGoals = sanitizeNumber(hg);
+        match.awayGoals = sanitizeNumber(ag);
+        match.lastUpdate = new Date().toISOString();
+        
+        if (await saveDataToFirebase()) {
+            renderAllAdmin();
+            alert(`✅ Placar atualizado: ${getTeamName(match.homeTeamId)} ${match.homeGoals} x ${match.awayGoals} ${getTeamName(match.awayTeamId)}`);
+        }
+    };
+
+    // ================================================================
+    //  ⭐ FUNÇÕES DE DELEÇÃO CORRIGIDAS ⭐
+    // ================================================================
+
+    window.deleteMatch = async function(id) {
+        if (!checkSession()) return;
+        if (!confirm('Remover este jogo permanentemente?')) return;
+        
+        try {
+            setStatus('saving', 'Removendo jogo...');
+            
+            // 1. Remove do Firestore
+            await db.collection('matches').doc(id).delete();
+            
+            // 2. Remove do array local
+            data.matches = data.matches.filter(m => m.id !== id);
+            
+            // 3. Força atualização da interface
+            renderAllAdmin();
+            
+            setStatus('online', '✅ Jogo removido!');
+            alert('✅ Jogo removido com sucesso!');
+        } catch (error) {
+            console.error('Erro ao remover jogo:', error);
+            setStatus('offline', '❌ Erro ao remover');
+            alert('❌ Erro ao remover: ' + error.message);
+        }
+    };
+
+    window.deleteTeam = async function(id) {
+        if (!checkSession()) return;
+        if (!confirm('Remover este time? Todos os jogos e cartões associados também serão removidos!')) return;
+        
+        try {
+            setStatus('saving', 'Removendo time...');
+            
+            // 1. Remove do Firestore
+            await db.collection('teams').doc(id).delete();
+            
+            // 2. Remove do array local
+            data.teams = data.teams.filter(t => t.id !== id);
+            data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
+            data.cards = data.cards.filter(c => c.teamId !== id);
+            
+            // 3. Remove do mata-mata
+            ['quartas', 'semi', 'final'].forEach(fase => {
+                data.mataMata[fase] = data.mataMata[fase].filter(m => m.home !== id && m.away !== id);
+            });
+            
+            // 4. Salva mata-mata atualizado
+            const mataMataRef = db.collection('mataMata').doc('config');
+            await mataMataRef.set(data.mataMata);
+            
+            // 5. Força atualização da interface
+            renderAllAdmin();
+            
+            setStatus('online', '✅ Time removido!');
+            alert('✅ Time removido com sucesso!');
+        } catch (error) {
+            console.error('Erro ao remover time:', error);
+            setStatus('offline', '❌ Erro ao remover');
+            alert('❌ Erro ao remover: ' + error.message);
+        }
+    };
+
+    window.deleteCard = async function(id) {
+        if (!checkSession()) return;
+        if (!confirm('Remover este cartão?')) return;
+        
+        try {
+            setStatus('saving', 'Removendo cartão...');
+            
+            // 1. Remove do Firestore
+            await db.collection('cards').doc(id).delete();
+            
+            // 2. Remove do array local
+            data.cards = data.cards.filter(c => c.id !== id);
+            
+            // 3. Força atualização da interface
+            renderAllAdmin();
+            
+            setStatus('online', '✅ Cartão removido!');
+            alert('✅ Cartão removido com sucesso!');
+        } catch (error) {
+            console.error('Erro ao remover cartão:', error);
+            setStatus('offline', '❌ Erro ao remover');
+            alert('❌ Erro ao remover: ' + error.message);
+        }
+    };
+
+    window.deleteScorer = async function(id) {
+        if (!checkSession()) return;
+        if (!confirm('Remover este artilheiro?')) return;
+        
+        try {
+            setStatus('saving', 'Removendo artilheiro...');
+            
+            // 1. Remove do Firestore
+            await db.collection('scorers').doc(id).delete();
+            
+            // 2. Remove do array local
+            data.scorers = data.scorers.filter(s => s.id !== id);
+            
+            // 3. Força atualização da interface
+            renderAllAdmin();
+            
+            setStatus('online', '✅ Artilheiro removido!');
+            alert('✅ Artilheiro removido com sucesso!');
+        } catch (error) {
+            console.error('Erro ao remover artilheiro:', error);
+            setStatus('offline', '❌ Erro ao remover');
+            alert('❌ Erro ao remover: ' + error.message);
         }
     };
 
@@ -986,6 +1197,8 @@
     document.getElementById('addScorerBtn').addEventListener('click', window.addScorer);
 
     document.getElementById('simulateBtn').addEventListener('click', async () => {
+        if (!checkSession()) return;
+        
         if (data.teams.length < 2) {
             alert('Adicione pelo menos 2 times!');
             return;
@@ -1026,7 +1239,12 @@
     });
 
     document.getElementById('resetBtn').addEventListener('click', async () => {
-        if (confirm('Tem certeza? Todos os dados serão perdidos!')) {
+        if (!checkSession()) return;
+        if (!confirm('Tem certeza? Todos os dados serão perdidos!')) return;
+        
+        try {
+            setStatus('saving', 'Resetando dados...');
+            
             // Limpa todas as coleções
             const collections = ['teams', 'matches', 'scorers', 'cards', 'mataMata', 'config'];
             for (const col of collections) {
@@ -1036,7 +1254,6 @@
                 await batch.commit();
             }
             
-            // Recria dados padrão
             data = {
                 teams: [],
                 matches: [],
@@ -1046,22 +1263,54 @@
                 config: { prefeituraLogo: 'images/prefeitura.png', campeonatoNome: 'Campeonato Municipal', temporada: '2026' }
             };
             
-            await saveDataToFirebase();
+            // Recria config
+            const configRef = db.collection('config').doc('config');
+            await configRef.set(data.config);
+            
+            // Recria mataMata
+            const mataMataRef = db.collection('mataMata').doc('config');
+            await mataMataRef.set(data.mataMata);
+            
             renderAllAdmin();
-            alert('✅ Dados resetados!');
+            setStatus('online', '✅ Dados resetados!');
+            alert('✅ Dados resetados com sucesso!');
+        } catch (error) {
+            console.error('Erro ao resetar:', error);
+            setStatus('offline', '❌ Erro ao resetar');
+            alert('❌ Erro ao resetar: ' + error.message);
         }
     });
 
     document.getElementById('refreshBtn').addEventListener('click', async () => {
+        if (!checkSession()) return;
         await loadDataFromFirebase();
         renderAllAdmin();
         alert('✅ Dados recarregados!');
     });
 
+    window.forceRefresh = async function() {
+        if (!checkSession()) return;
+        
+        try {
+            setStatus('saving', 'Recarregando dados...');
+            await loadDataFromFirebase();
+            renderAllAdmin();
+            setStatus('online', '✅ Dados recarregados!');
+            alert('✅ Dados recarregados com sucesso!');
+        } catch (error) {
+            console.error('Erro ao recarregar:', error);
+            setStatus('offline', '❌ Erro ao recarregar');
+            alert('❌ Erro ao recarregar: ' + error.message);
+        }
+    };
+
+    document.getElementById('forceRefreshBtn').addEventListener('click', window.forceRefresh);
+
     // ================================================================
     //  EXPORT / IMPORT
     // ================================================================
     document.getElementById('exportBtn').addEventListener('click', () => {
+        if (!checkSession()) return;
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1072,10 +1321,12 @@
     });
 
     document.getElementById('importBtn').addEventListener('click', () => {
+        if (!checkSession()) return;
         document.getElementById('fileInput').click();
     });
 
     document.getElementById('fileInput').addEventListener('change', async (e) => {
+        if (!checkSession()) return;
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();

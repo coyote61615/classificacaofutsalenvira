@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Administrativo</title>
+    <title>Painel Administrativo - Campeonato Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ===== ESTILO COMPLETO (mesmo do admin anterior) ===== */
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +27,8 @@
             max-width: 1300px;
             width: 100%;
         }
+
+        /* ===== LOGIN ===== */
         .login-box {
             max-width: 400px;
             margin: 80px auto;
@@ -80,6 +82,8 @@
             margin-top: 10px;
             display: none;
         }
+
+        /* ===== ADMIN HEADER ===== */
         .admin-header {
             background: #fff;
             border-radius: 20px;
@@ -100,7 +104,37 @@
             align-items: center;
             gap: 12px;
         }
-        .admin-header h1 i { color: #FFC107; }
+        .admin-header h1 i {
+            color: #FFC107;
+        }
+        .admin-header .status {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-header .status .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .admin-header .status .dot.online {
+            background: #27ae60;
+        }
+        .admin-header .status .dot.offline {
+            background: #e74c3c;
+        }
+        .admin-header .status .dot.saving {
+            background: #f39c12;
+            animation: pulse 0.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* ===== CARDS ===== */
         .card {
             background: #fff;
             border-radius: 20px;
@@ -118,7 +152,16 @@
             align-items: center;
             gap: 10px;
         }
-        .card-title i { color: #FFC107; }
+        .card-title i {
+            color: #FFC107;
+        }
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #6c7a8a;
+            margin-bottom: 16px;
+        }
+
+        /* ===== FORMULÁRIOS ===== */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -153,6 +196,8 @@
             margin-top: 20px;
             flex-wrap: wrap;
         }
+
+        /* ===== BOTÕES ===== */
         .btn {
             padding: 10px 24px;
             border: none;
@@ -237,6 +282,12 @@
         .btn-card-vermelho:hover {
             background: #c0392b;
         }
+        .btn-small {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+
+        /* ===== CHIPS ===== */
         .chip-list {
             display: flex;
             flex-wrap: wrap;
@@ -270,7 +321,11 @@
         .chip .remove-btn:hover {
             color: #c0392b;
         }
-        .table-wrap { overflow-x: auto; }
+
+        /* ===== TABELAS ===== */
+        .table-wrap {
+            overflow-x: auto;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -291,8 +346,14 @@
             border-bottom: 1px solid #e9ecef;
             vertical-align: middle;
         }
-        tr:last-child td { border-bottom: none; }
-        .hidden { display: none; }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== STATUS ===== */
+        .hidden {
+            display: none !important;
+        }
         .live-badge {
             background: #ff4757;
             color: #fff;
@@ -304,9 +365,25 @@
         .live-badge.active {
             background: #2ecc71;
         }
-        .status-pendente { color: #f39c12; font-weight: 600; }
-        .status-realizado { color: #27ae60; font-weight: 600; }
-        .status-ao-vivo { color: #e74c3c; font-weight: 600; animation: pulse 1.5s infinite; }
+        .status-pendente {
+            color: #f39c12;
+            font-weight: 600;
+        }
+        .status-realizado {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        .status-ao-vivo {
+            color: #e74c3c;
+            font-weight: 600;
+            animation: pulse-text 1.5s infinite;
+        }
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ===== MATA-MATA ADMIN ===== */
         .mata-mata-match-admin {
             background: #f8fdf9;
             border-radius: 12px;
@@ -325,7 +402,9 @@
             gap: 16px;
             flex-wrap: wrap;
         }
-        .mata-mata-match-admin .match-teams { font-weight: 600; }
+        .mata-mata-match-admin .match-teams {
+            font-weight: 600;
+        }
         .mata-mata-match-admin .match-score {
             font-weight: 700;
             color: #e67e22;
@@ -348,6 +427,8 @@
             display: inline-block;
             margin-bottom: 12px;
         }
+
+        /* ===== CARTÕES ADMIN ===== */
         .card-item-admin {
             background: #f8fdf9;
             border-radius: 12px;
@@ -382,18 +463,73 @@
             color: #e74c3c;
             border: 1px solid #e74c3c;
         }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+
+        /* ===== EDIT FORM ===== */
+        .edit-form {
+            background: #f8fdf9;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 8px 0;
+            border: 2px solid #e67e22;
         }
+        .edit-form .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .edit-form .form-row label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .edit-form .form-row input,
+        .edit-form .form-row select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+        .edit-form .form-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ===== RESPONSIVO ===== */
         @media (max-width: 600px) {
-            .login-box { padding: 24px; margin: 40px auto; }
-            .admin-header { padding: 14px 18px; }
-            .card { padding: 16px; }
-            .form-grid { grid-template-columns: 1fr; }
-            td { font-size: 0.8rem; padding: 6px; }
-            .btn { padding: 6px 12px; font-size: 0.7rem; }
+            .login-box {
+                padding: 24px;
+                margin: 40px auto;
+            }
+            .admin-header {
+                padding: 14px 18px;
+            }
+            .card {
+                padding: 16px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            td {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            .mata-mata-match-admin {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .mata-mata-match-admin .match-actions {
+                justify-content: flex-start;
+            }
+            .edit-form .form-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -419,7 +555,11 @@
         <!-- HEADER -->
         <div class="admin-header">
             <h1><i class="fas fa-cog"></i> Painel Administrativo</h1>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <span class="status">
+                    <span class="dot online" id="statusDot"></span>
+                    <span id="statusText">Pronto</span>
+                </span>
                 <button class="btn btn-outline" id="exportBtn"><i class="fas fa-download"></i> Exportar</button>
                 <button class="btn btn-outline" id="importBtn"><i class="fas fa-upload"></i> Importar</button>
                 <input type="file" id="fileInput" accept=".json" style="display:none" />
@@ -427,7 +567,7 @@
             </div>
         </div>
 
-        <!-- TIMES -->
+        <!-- ===== TIMES ===== -->
         <div class="card">
             <div class="card-title"><i class="fas fa-users"></i> Gerenciar Times</div>
             <div class="form-grid">
@@ -448,7 +588,7 @@
             <div class="chip-list" id="teamList"></div>
         </div>
 
-        <!-- JOGOS -->
+        <!-- ===== JOGOS ===== -->
         <div class="card">
             <div class="card-title"><i class="fas fa-futbol"></i> Gerenciar Jogos</div>
             <div class="form-grid">
@@ -483,21 +623,31 @@
         <!-- ===== MATA-MATA ===== -->
         <div class="card" style="border-top-color:#e67e22;">
             <div class="card-title"><i class="fas fa-flag-checkered" style="color:#e67e22;"></i> Fase Mata-Mata</div>
+            <div class="card-subtitle">
+                <i class="fas fa-info-circle"></i> Gerencie os jogos das fases eliminatórias
+            </div>
+            
+            <!-- Quartas -->
             <div style="margin-bottom:24px;">
                 <div class="mata-mata-round-title">🏆 Quartas de Final</div>
                 <div id="quartasContainer"></div>
                 <button class="btn btn-mata-mata" id="addQuartasBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
+
+            <!-- Semifinais -->
             <div style="margin-bottom:24px;">
                 <div class="mata-mata-round-title">🏆 Semifinais</div>
                 <div id="semiContainer"></div>
                 <button class="btn btn-mata-mata" id="addSemiBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
+
+            <!-- Final -->
             <div style="margin-bottom:16px;">
                 <div class="mata-mata-round-title" style="background:#FFC107;color:#333;">🏆 Final</div>
                 <div id="finalContainer"></div>
                 <button class="btn btn-mata-mata" id="addFinalBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
+
             <div class="form-actions" style="margin-top:12px; border-top:1px solid #e9ecef; padding-top:16px;">
                 <button class="btn btn-danger" id="resetMataMataBtn"><i class="fas fa-undo-alt"></i> Resetar Mata-Mata</button>
             </div>
@@ -526,7 +676,7 @@
             </div>
         </div>
 
-        <!-- ARTILHEIROS -->
+        <!-- ===== ARTILHEIROS ===== -->
         <div class="card">
             <div class="card-title"><i class="fas fa-user-plus"></i> Gerenciar Artilheiros</div>
             <div class="form-grid">
@@ -545,11 +695,12 @@
             </div>
         </div>
 
-        <!-- AÇÕES GERAIS -->
+        <!-- ===== AÇÕES GERAIS ===== -->
         <div class="card">
             <div class="card-title"><i class="fas fa-trash-alt"></i> Ações Gerais</div>
             <div class="form-actions">
                 <button class="btn btn-danger" id="resetBtn"><i class="fas fa-undo-alt"></i> Resetar Todos os Dados</button>
+                <button class="btn btn-outline" id="refreshBtn"><i class="fas fa-sync-alt"></i> Recarregar Dados</button>
             </div>
         </div>
     </div>
@@ -557,9 +708,18 @@
 
 <script>
     // ================================================================
-    //  BANCO DE DADOS (localStorage)
+    //  CONFIGURAÇÃO DO GITHUB
     // ================================================================
-    const STORAGE_KEY = 'campeonato_municipal_data';
+    // ⚠️ SUBSTITUA ESTAS VARIÁVEIS COM SEUS DADOS ⚠️
+    const GITHUB_TOKEN = 'SEU_TOKEN_AQUI'; // Cole seu token gerado no GitHub
+    const GITHUB_USER = 'SEU_USUARIO'; // Seu nome de usuário do GitHub
+    const GITHUB_REPO = 'SEU_REPOSITORIO'; // Nome do repositório
+    const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/dados.json`;
+
+    // ================================================================
+    //  BANCO DE DADOS
+    // ================================================================
+    let data = {};
 
     function getDefaultData() {
         return {
@@ -577,7 +737,7 @@
                 { id: 't11', name: 'ARFAS SOURE', badge: 'ARF', color: '#8e44ad', logo: 'images/arfas.png', group: 'B' },
                 { id: 't12', name: 'PAYSANDU', badge: 'PAY', color: '#2c3e50', logo: 'images/paysandu.png', group: 'B' },
                 { id: 't13', name: 'TUNA LUSO', badge: 'TUN', color: '#d35400', logo: 'images/tuna.png', group: 'B' },
-                { id: 't14', name: 'CASTANHAL', badge: 'CAS', color: '#16a085', logo: 'images/castanhal.png', group: 'B' },
+                { id: 't14', name: 'CASTANHAL', badge: 'CAS', color: '#16a085', logo: 'images/castanhal.png', group: 'B' }
             ],
             matches: [
                 { id: 'm1', homeTeamId: 't1', awayTeamId: 't2', homeGoals: 3, awayGoals: 1, datetime: '2026-08-10T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
@@ -597,76 +757,189 @@
                 { id: 'm15', homeTeamId: 't11', awayTeamId: 't13', homeGoals: 3, awayGoals: 2, datetime: '2026-08-14T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
                 { id: 'm16', homeTeamId: 't8', awayTeamId: 't11', homeGoals: 6, awayGoals: 1, datetime: '2026-08-16T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
                 { id: 'm17', homeTeamId: 't9', awayTeamId: 't13', homeGoals: 4, awayGoals: 1, datetime: '2026-08-16T18:30', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm18', homeTeamId: 't10', awayTeamId: 't12', homeGoals: 2, awayGoals: 1, datetime: '2026-08-17T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
+                { id: 'm18', homeTeamId: 't10', awayTeamId: 't12', homeGoals: 2, awayGoals: 1, datetime: '2026-08-17T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null }
             ],
             scorers: [
                 { id: 's1', playerName: 'Joãozinho', teamId: 't1', goals: 8 },
                 { id: 's2', playerName: 'Carlos', teamId: 't8', goals: 7 },
                 { id: 's3', playerName: 'Pedro', teamId: 't2', goals: 6 },
                 { id: 's4', playerName: 'Lucas', teamId: 't9', goals: 5 },
-                { id: 's5', playerName: 'Rafael', teamId: 't3', goals: 4 },
+                { id: 's5', playerName: 'Rafael', teamId: 't3', goals: 4 }
             ],
             cards: [
-                { id: 'c1', playerName: 'Marcos', teamId: 't1', type: 'amarelo', matchId: 'm1', datetime: '2026-08-10T16:15' },
-                { id: 'c2', playerName: 'Anderson', teamId: 't2', type: 'vermelho', matchId: 'm1', datetime: '2026-08-10T16:30' },
-                { id: 'c3', playerName: 'Rafael', teamId: 't3', type: 'amarelo', matchId: 'm2', datetime: '2026-08-10T18:45' },
-                { id: 'c4', playerName: 'Paulo', teamId: 't8', type: 'amarelo', matchId: 'm10', datetime: '2026-08-10T16:20' },
-                { id: 'c5', playerName: 'Thiago', teamId: 't9', type: 'vermelho', matchId: 'm10', datetime: '2026-08-10T16:35' },
+                { id: 'c1', playerName: 'Marcos', teamId: 't1', type: 'amarelo', matchId: null, datetime: '2026-08-10T16:15' },
+                { id: 'c2', playerName: 'Anderson', teamId: 't2', type: 'vermelho', matchId: null, datetime: '2026-08-10T16:30' },
+                { id: 'c3', playerName: 'Rafael', teamId: 't3', type: 'amarelo', matchId: null, datetime: '2026-08-10T18:45' },
+                { id: 'c4', playerName: 'Paulo', teamId: 't8', type: 'amarelo', matchId: null, datetime: '2026-08-10T16:20' },
+                { id: 'c5', playerName: 'Thiago', teamId: 't9', type: 'vermelho', matchId: null, datetime: '2026-08-10T16:35' }
             ],
-            prefeituraLogo: 'images/prefeitura.png',
             mataMata: {
                 quartas: [
                     { home: 't1', away: 't14', homeGoals: null, awayGoals: null },
                     { home: 't8', away: 't7', homeGoals: null, awayGoals: null },
                     { home: 't2', away: 't13', homeGoals: null, awayGoals: null },
-                    { home: 't9', away: 't6', homeGoals: null, awayGoals: null },
+                    { home: 't9', away: 't6', homeGoals: null, awayGoals: null }
                 ],
                 semi: [
                     { home: null, away: null, homeGoals: null, awayGoals: null },
-                    { home: null, away: null, homeGoals: null, awayGoals: null },
+                    { home: null, away: null, homeGoals: null, awayGoals: null }
                 ],
                 final: [
-                    { home: null, away: null, homeGoals: null, awayGoals: null },
+                    { home: null, away: null, homeGoals: null, awayGoals: null }
                 ]
-            }
+            },
+            config: {
+                prefeituraLogo: 'images/prefeitura.png',
+                campeonatoNome: 'Campeonato Municipal',
+                temporada: '2026'
+            },
+            lastUpdate: new Date().toISOString()
         };
     }
 
-    function loadData() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
+    // ================================================================
+    //  FUNÇÕES DE SINCronização COM GITHUB
+    // ================================================================
+    function setStatus(status, message) {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        dot.className = 'dot ' + status;
+        text.textContent = message;
+    }
+
+    async function saveDataToGitHub() {
+        try {
+            setStatus('saving', 'Salvando...');
+            
+            // Atualiza a data da última modificação
+            data.lastUpdate = new Date().toISOString();
+            
+            // Busca o SHA atual do arquivo
+            let sha = null;
             try {
-                const data = JSON.parse(raw);
-                if (!data.teams) data.teams = [];
-                if (!data.matches) data.matches = [];
-                if (!data.scorers) data.scorers = [];
-                if (!data.cards) data.cards = [];
-                if (!data.mataMata) data.mataMata = getDefaultData().mataMata;
-                return data;
-            } catch (e) { return getDefaultData(); }
+                const getResponse = await fetch(GITHUB_API_URL, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (getResponse.ok) {
+                    const fileInfo = await getResponse.json();
+                    sha = fileInfo.sha;
+                }
+            } catch (e) {
+                // Arquivo ainda não existe, vai criar
+            }
+
+            // Prepara o conteúdo em base64
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+            
+            // Envia para o GitHub
+            const response = await fetch(GITHUB_API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: `Atualização automática - ${new Date().toLocaleString()}`,
+                    content: content,
+                    sha: sha
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Erro ao salvar no GitHub');
+            }
+
+            setStatus('online', 'Salvo com sucesso!');
+            return true;
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            setStatus('offline', 'Erro ao salvar');
+            alert('❌ Erro ao salvar no GitHub: ' + error.message);
+            return false;
         }
-        return getDefaultData();
     }
 
-    function saveData(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    async function loadDataFromGitHub() {
+        try {
+            setStatus('saving', 'Carregando...');
+            
+            const response = await fetch(GITHUB_API_URL + '?t=' + Date.now(), {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // Arquivo não existe, cria com dados padrão
+                    data = getDefaultData();
+                    await saveDataToGitHub();
+                    setStatus('online', 'Dados criados');
+                    return data;
+                }
+                throw new Error('Erro ao carregar dados');
+            }
+
+            const fileInfo = await response.json();
+            const content = JSON.parse(atob(fileInfo.content));
+            data = content;
+            
+            setStatus('online', 'Dados carregados');
+            return data;
+        } catch (error) {
+            console.error('Erro ao carregar:', error);
+            setStatus('offline', 'Erro ao carregar');
+            
+            // Fallback para dados padrão
+            if (!data || Object.keys(data).length === 0) {
+                data = getDefaultData();
+            }
+            return data;
+        }
     }
 
-    let data = loadData();
+    // ================================================================
+    //  FUNÇÕES AUXILIARES
+    // ================================================================
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
 
-    // ================================================================
-    //  AUXILIARES
-    // ================================================================
-    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
-    function getTeam(id) { return data.teams.find(t => t.id === id); }
-    function getTeamName(id) { const t = getTeam(id); return t ? t.name : '?'; }
-    function getTeamBadge(id) { const t = getTeam(id); return t ? t.badge : '?'; }
-    function getTeamColor(id) { const t = getTeam(id); return t ? t.color : '#2a3f52'; }
-    function getTeamLogo(id) { const t = getTeam(id); return t ? t.logo : null; }
+    function getTeam(id) {
+        return data.teams.find(t => t.id === id);
+    }
+
+    function getTeamName(id) {
+        const t = getTeam(id);
+        return t ? t.name : '?';
+    }
+
+    function getTeamBadge(id) {
+        const t = getTeam(id);
+        return t ? t.badge : '?';
+    }
+
+    function getTeamColor(id) {
+        const t = getTeam(id);
+        return t ? t.color : '#2a3f52';
+    }
+
     function formatDate(dt) {
         if (!dt) return '—';
         const d = new Date(dt);
-        return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        return d.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
     }
 
     // ================================================================
@@ -681,7 +954,9 @@
         if (auth === 'true') {
             loginScreen.classList.add('hidden');
             adminPanel.classList.remove('hidden');
-            renderAllAdmin();
+            loadDataFromGitHub().then(() => {
+                renderAllAdmin();
+            });
         } else {
             loginScreen.classList.remove('hidden');
             adminPanel.classList.add('hidden');
@@ -706,27 +981,6 @@
     });
 
     // ================================================================
-    //  FUNÇÕES ADMIN
-    // ================================================================
-    
-    window.updateLiveScore = function(id) {
-        const match = data.matches.find(m => m.id === id);
-        if (!match) { alert('Jogo não encontrado!'); return; }
-        if (!match.live) { alert('Este jogo não está AO VIVO.'); return; }
-        if (!match.played) { alert('Finalize o jogo primeiro.'); return; }
-        const hg = prompt(`Gols do mandante (${getTeamName(match.homeTeamId)}):`, match.homeGoals || 0);
-        if (hg === null) return;
-        const ag = prompt(`Gols do visitante (${getTeamName(match.awayTeamId)}):`, match.awayGoals || 0);
-        if (ag === null) return;
-        match.homeGoals = parseInt(hg) || 0;
-        match.awayGoals = parseInt(ag) || 0;
-        match.lastUpdate = new Date().toISOString();
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    };
-
-    // ================================================================
     //  RENDER ADMIN
     // ================================================================
     function populateSelects() {
@@ -734,7 +988,17 @@
         const away = document.getElementById('matchAway');
         const scorerTeam = document.getElementById('scorerTeam');
         const cardTeam = document.getElementById('cardTeam');
-        [home, away, scorerTeam, cardTeam].forEach(sel => { sel.innerHTML = ''; });
+        
+        [home, away, scorerTeam, cardTeam].forEach(sel => {
+            sel.innerHTML = '';
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = 'Selecione um time';
+            defaultOpt.disabled = true;
+            defaultOpt.selected = true;
+            sel.appendChild(defaultOpt);
+        });
+
         data.teams.forEach(t => {
             const opt = document.createElement('option');
             opt.value = t.id;
@@ -755,46 +1019,41 @@
             chip.innerHTML = `
                 <span class="color-dot" style="background:${t.color || '#2a3f52'};"></span>
                 ${t.badge} - ${t.name} (${t.group || '?'})
-                <button class="remove-btn" data-id="${t.id}">✕</button>
+                <button class="remove-btn" onclick="deleteTeam('${t.id}')">✕</button>
             `;
             container.appendChild(chip);
-        });
-        container.querySelectorAll('.remove-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
-                if (confirm('Remover este time?')) {
-                    data.teams = data.teams.filter(t => t.id !== id);
-                    data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
-                    data.cards = data.cards.filter(c => c.teamId !== id);
-                    ['quartas', 'semi', 'final'].forEach(fase => {
-                        data.mataMata[fase] = data.mataMata[fase].filter(m => m.home !== id && m.away !== id);
-                    });
-                    saveData(data);
-                    renderAllAdmin();
-                }
-            });
         });
     }
 
     function renderMatchesTable() {
         const tbody = document.getElementById('matchesTableBody');
         tbody.innerHTML = '';
+        
         const sorted = [...data.matches].sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
         sorted.forEach(m => {
             const tr = document.createElement('tr');
             let score = '—', statusText = '', statusClass = '';
+            
             if (m.played) {
                 score = `${m.homeGoals||0} x ${m.awayGoals||0}`;
-                if (m.live) { statusText = '🔴 AO VIVO'; statusClass = 'status-ao-vivo'; }
-                else { statusText = '✅ Realizado'; statusClass = 'status-realizado'; }
+                if (m.live) {
+                    statusText = '🔴 AO VIVO';
+                    statusClass = 'status-ao-vivo';
+                } else {
+                    statusText = '✅ Realizado';
+                    statusClass = 'status-realizado';
+                }
             } else {
                 statusText = '⏳ Pendente';
                 statusClass = 'status-pendente';
             }
+            
             const liveBadge = m.live ? '<span class="live-badge active"><i class="fas fa-circle"></i> AO VIVO</span>' : '<span class="live-badge">OFF</span>';
-            const updateBtn = m.live ? `<button class="btn btn-amarelo" style="padding:4px 12px;font-size:0.7rem;" onclick="updateLiveScore('${m.id}')"><i class="fas fa-sync-alt"></i></button>` : '';
+            const updateBtn = m.live ? `<button class="btn btn-amarelo btn-small" onclick="updateLiveScore('${m.id}')"><i class="fas fa-sync-alt"></i></button>` : '';
+            
             tr.innerHTML = `
-                <td>${getTeamName(m.homeTeamId)}</td><td>${getTeamName(m.awayTeamId)}</td>
+                <td>${getTeamName(m.homeTeamId)}</td>
+                <td>${getTeamName(m.awayTeamId)}</td>
                 <td><strong>${score}</strong></td>
                 <td>${formatDate(m.datetime)}</td>
                 <td>${m.venue || '—'}</td>
@@ -802,9 +1061,9 @@
                 <td>${liveBadge}</td>
                 <td style="display:flex; gap:4px; flex-wrap:wrap;">
                     ${updateBtn}
-                    <button class="btn btn-ao-vivo ${m.live ? 'active' : ''}" style="padding:4px 12px;font-size:0.7rem;" onclick="toggleLive('${m.id}')">${m.live ? '⏹' : '▶'}</button>
-                    <button class="btn btn-success" style="padding:4px 12px;font-size:0.7rem;" onclick="toggleMatch('${m.id}')">${m.played ? '↩️' : '✅'}</button>
-                    <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="deleteMatch('${m.id}')">✕</button>
+                    <button class="btn btn-ao-vivo ${m.live ? 'active' : ''} btn-small" onclick="toggleLive('${m.id}')">${m.live ? '⏹' : '▶'}</button>
+                    <button class="btn btn-success btn-small" onclick="toggleMatch('${m.id}')">${m.played ? '↩️' : '✅'}</button>
+                    <button class="btn btn-danger btn-small" onclick="deleteMatch('${m.id}')">✕</button>
                 </td>
             `;
             tbody.appendChild(tr);
@@ -822,20 +1081,21 @@
                 <td>${s.playerName}</td>
                 <td>${getTeamName(s.teamId)}</td>
                 <td>${s.goals}</td>
-                <td><button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="deleteScorer('${s.id}')">✕</button></td>
+                <td><button class="btn btn-danger btn-small" onclick="deleteScorer('${s.id}')">✕</button></td>
             `;
             tbody.appendChild(tr);
         });
     }
 
-    // ===== RENDER CARTÕES ADMIN =====
     function renderCardsAdmin() {
         const container = document.getElementById('cardsListAdmin');
         container.innerHTML = '';
+        
         if (data.cards.length === 0) {
             container.innerHTML = '<p style="color:#6c7a8a;padding:12px 0;">Nenhum cartão registrado.</p>';
             return;
         }
+        
         const sorted = [...data.cards].sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
         sorted.forEach(card => {
             const div = document.createElement('div');
@@ -847,33 +1107,35 @@
                     <span class="card-type ${card.type}">${card.type === 'amarelo' ? '🟨 Amarelo' : '🟥 Vermelho'}</span>
                     <span style="font-size:0.75rem;color:#6c7a8a;"><i class="far fa-calendar-alt"></i> ${formatDate(card.datetime)}</span>
                 </div>
-                <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="deleteCard('${card.id}')">✕</button>
+                <button class="btn btn-danger btn-small" onclick="deleteCard('${card.id}')">✕</button>
             `;
             container.appendChild(div);
         });
     }
 
-    // ===== RENDER MATA-MATA ADMIN =====
     function renderMataMataAdmin() {
         const mm = data.mataMata;
         if (!mm) return;
+        
         ['quartas', 'semi', 'final'].forEach(fase => {
             const container = document.getElementById(`${fase}Container`);
             container.innerHTML = '';
+            
             mm[fase].forEach((match, index) => {
                 const div = document.createElement('div');
                 div.className = 'mata-mata-match-admin';
                 const homeName = match.home ? getTeamName(match.home) : 'A definir';
                 const awayName = match.away ? getTeamName(match.away) : 'A definir';
                 const score = (match.homeGoals !== null && match.awayGoals !== null) ? `${match.homeGoals} x ${match.awayGoals}` : '— x —';
+                
                 div.innerHTML = `
                     <div class="match-info">
                         <span class="match-teams">${homeName} vs ${awayName}</span>
                         <span class="match-score">${score}</span>
                     </div>
                     <div class="match-actions">
-                        <button class="btn btn-success" style="padding:4px 12px;font-size:0.7rem;" onclick="editMataMataMatch('${fase}', ${index})"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="removeMataMataMatch('${fase}', ${index})"><i class="fas fa-trash"></i></button>
+                        <button class="btn btn-success btn-small" onclick="editMataMataMatch('${fase}', ${index})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-small" onclick="removeMataMataMatch('${fase}', ${index})"><i class="fas fa-trash"></i></button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -881,189 +1143,131 @@
         });
     }
 
-    // ================================================================
-    //  FUNÇÕES MATA-MATA ADMIN
-    // ================================================================
-    window.editMataMataMatch = function(fase, index) {
-        const match = data.mataMata[fase][index];
-        if (!match) { alert('Jogo não encontrado!'); return; }
-        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        const teamOptions = teams.map(t => `<option value="${t.id}" ${match.home === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`).join('');
-        const awayOptions = teams.map(t => `<option value="${t.id}" ${match.away === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`).join('');
-        const html = `
-            <div style="background:#f8fdf9;padding:16px;border-radius:12px;margin:8px 0;border:2px solid #e67e22;">
-                <h4 style="margin-bottom:12px;color:#2E7D32;">Editar Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-                    <div><label style="font-size:0.8rem;font-weight:600;">Mandante</label><select id="editHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
-                    <div><label style="font-size:0.8rem;font-weight:600;">Visitante</label><select id="editAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${awayOptions}</select></div>
-                    <div><label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="number" id="editHomeGoals" placeholder="Gols" value="${match.homeGoals !== null ? match.homeGoals : ''}" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
-                            <input type="number" id="editAwayGoals" placeholder="Gols" value="${match.awayGoals !== null ? match.awayGoals : ''}" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:12px;display:flex;gap:8px;">
-                    <button class="btn btn-success" onclick="saveMataMataMatch('${fase}', ${index})"><i class="fas fa-save"></i> Salvar</button>
-                    <button class="btn btn-outline" onclick="cancelEditMataMata()"><i class="fas fa-times"></i> Cancelar</button>
-                </div>
-            </div>
-        `;
-        const container = document.getElementById(`${fase}Container`);
-        const children = container.children;
-        if (children[index]) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            children[index].replaceWith(tempDiv.firstElementChild);
-        }
-    };
-
-    window.saveMataMataMatch = function(fase, index) {
-        const homeId = document.getElementById('editHomeTeam').value;
-        const awayId = document.getElementById('editAwayTeam').value;
-        const homeGoals = document.getElementById('editHomeGoals').value;
-        const awayGoals = document.getElementById('editAwayGoals').value;
-        if (!homeId || !awayId) { alert('Selecione os dois times!'); return; }
-        if (homeId === awayId) { alert('Os times devem ser diferentes!'); return; }
-        data.mataMata[fase][index] = {
-            home: homeId,
-            away: awayId,
-            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
-            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
-        };
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    };
-
-    window.cancelEditMataMata = function() { renderAllAdmin(); };
-    window.removeMataMataMatch = function(fase, index) {
-        if (confirm(`Remover este jogo da ${fase}?`)) {
-            data.mataMata[fase].splice(index, 1);
-            saveData(data);
-            renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-        }
-    };
-
-    function addMataMataMatch(fase) {
-        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        if (teams.length < 2) { alert('Adicione pelo menos 2 times primeiro!'); return; }
-        const teamOptions = teams.map(t => `<option value="${t.id}">${t.badge} - ${t.name}</option>`).join('');
-        const html = `
-            <div style="background:#f8fdf9;padding:16px;border-radius:12px;margin:8px 0;border:2px solid #e67e22;">
-                <h4 style="margin-bottom:12px;color:#2E7D32;">Novo Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-                    <div><label style="font-size:0.8rem;font-weight:600;">Mandante</label><select id="newHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
-                    <div><label style="font-size:0.8rem;font-weight:600;">Visitante</label><select id="newAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
-                    <div><label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="number" id="newHomeGoals" placeholder="Gols" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
-                            <input type="number" id="newAwayGoals" placeholder="Gols" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:12px;display:flex;gap:8px;">
-                    <button class="btn btn-success" onclick="saveNewMataMataMatch('${fase}')"><i class="fas fa-save"></i> Adicionar</button>
-                    <button class="btn btn-outline" onclick="cancelEditMataMata()"><i class="fas fa-times"></i> Cancelar</button>
-                </div>
-            </div>
-        `;
-        const container = document.getElementById(`${fase}Container`);
-        const existingForms = container.querySelectorAll('div[style*="border:2px solid #e67e22;"]');
-        existingForms.forEach(el => el.remove());
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        container.appendChild(tempDiv.firstElementChild);
+    function renderAllAdmin() {
+        populateSelects();
+        renderTeamChips();
+        renderMatchesTable();
+        renderScorersTable();
+        renderCardsAdmin();
+        renderMataMataAdmin();
     }
 
-    window.saveNewMataMataMatch = function(fase) {
-        const homeId = document.getElementById('newHomeTeam').value;
-        const awayId = document.getElementById('newAwayTeam').value;
-        const homeGoals = document.getElementById('newHomeGoals').value;
-        const awayGoals = document.getElementById('newAwayGoals').value;
-        if (!homeId || !awayId) { alert('Selecione os dois times!'); return; }
-        if (homeId === awayId) { alert('Os times devem ser diferentes!'); return; }
-        data.mataMata[fase].push({
-            home: homeId,
-            away: awayId,
-            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
-            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
-        });
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    };
-
-    document.getElementById('addQuartasBtn').addEventListener('click', () => addMataMataMatch('quartas'));
-    document.getElementById('addSemiBtn').addEventListener('click', () => addMataMataMatch('semi'));
-    document.getElementById('addFinalBtn').addEventListener('click', () => addMataMataMatch('final'));
-    document.getElementById('resetMataMataBtn').addEventListener('click', () => {
-        if (confirm('Resetar toda a fase mata-mata?')) {
-            data.mataMata = { quartas: [], semi: [], final: [] };
-            saveData(data);
-            renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+    // ================================================================
+    //  FUNÇÕES CRUD - TIMES
+    // ================================================================
+    window.addTeam = async function() {
+        const name = document.getElementById('teamName').value.trim();
+        const badge = document.getElementById('teamBadge').value.trim().toUpperCase();
+        const color = document.getElementById('teamColor').value;
+        const logo = document.getElementById('teamLogo').value.trim() || '';
+        const group = document.getElementById('teamGroup').value;
+        
+        if (!name || !badge) {
+            alert('Preencha nome e sigla!');
+            return;
         }
-    });
-
-    // ================================================================
-    //  FUNÇÕES CARTÕES ADMIN
-    // ================================================================
-    document.getElementById('addCardBtn').addEventListener('click', () => {
-        const playerName = document.getElementById('cardPlayerName').value.trim();
-        const teamId = document.getElementById('cardTeam').value;
-        const type = document.getElementById('cardType').value;
-        const datetime = document.getElementById('cardDatetime').value;
-        if (!playerName) { alert('Digite o nome do jogador!'); return; }
-        if (!teamId) { alert('Selecione o time!'); return; }
-        if (!datetime) { alert('Selecione a data/hora do cartão!'); return; }
-        data.cards.push({
+        if (data.teams.find(t => t.badge === badge)) {
+            alert('Sigla já existe!');
+            return;
+        }
+        
+        data.teams.push({
             id: generateId(),
-            playerName,
-            teamId,
-            type,
-            datetime,
-            matchId: null
+            name,
+            badge,
+            color,
+            logo,
+            group
         });
-        saveData(data);
-        document.getElementById('cardPlayerName').value = '';
-        document.getElementById('cardDatetime').value = '';
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-        alert('✅ Cartão adicionado com sucesso!');
-    });
-
-    window.deleteCard = function(id) {
-        if (confirm('Remover este cartão?')) {
-            data.cards = data.cards.filter(c => c.id !== id);
-            saveData(data);
+        
+        if (await saveDataToGitHub()) {
             renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+            document.getElementById('teamName').value = '';
+            document.getElementById('teamBadge').value = '';
+            document.getElementById('teamLogo').value = '';
+            alert('✅ Time adicionado com sucesso!');
+        }
+    };
+
+    window.deleteTeam = async function(id) {
+        if (!confirm('Remover este time?')) return;
+        
+        data.teams = data.teams.filter(t => t.id !== id);
+        data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
+        data.cards = data.cards.filter(c => c.teamId !== id);
+        
+        ['quartas', 'semi', 'final'].forEach(fase => {
+            data.mataMata[fase] = data.mataMata[fase].filter(m => m.home !== id && m.away !== id);
+        });
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            alert('✅ Time removido!');
         }
     };
 
     // ================================================================
-    //  AÇÕES ADMIN (expondo globalmente)
+    //  FUNÇÕES CRUD - JOGOS
     // ================================================================
-
-    window.toggleLive = function(id) {
-        const match = data.matches.find(m => m.id === id);
-        if (!match) return;
-        if (!match.played) { alert('Finalize o jogo primeiro!'); return; }
-        match.live = !match.live;
-        if (match.live) match.lastUpdate = new Date().toISOString();
-        else match.lastUpdate = null;
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+    window.addMatch = async function(played = true) {
+        const homeId = document.getElementById('matchHome').value;
+        const awayId = document.getElementById('matchAway').value;
+        const homeGoalsInput = document.getElementById('matchHomeGoals').value;
+        const awayGoalsInput = document.getElementById('matchAwayGoals').value;
+        const datetime = document.getElementById('matchDatetime').value;
+        const venue = document.getElementById('matchVenue').value.trim() || 'Estádio Municipal';
+        
+        if (!homeId || !awayId || homeId === awayId) {
+            alert('Selecione dois times diferentes!');
+            return;
+        }
+        if (!datetime) {
+            alert('Selecione a data/hora!');
+            return;
+        }
+        
+        let homeGoals = null, awayGoals = null;
+        if (played) {
+            if (homeGoalsInput === '' || awayGoalsInput === '') {
+                alert('Preencha os gols!');
+                return;
+            }
+            homeGoals = parseInt(homeGoalsInput) || 0;
+            awayGoals = parseInt(awayGoalsInput) || 0;
+        }
+        
+        data.matches.push({
+            id: generateId(),
+            homeTeamId: homeId,
+            awayTeamId: awayId,
+            homeGoals,
+            awayGoals,
+            datetime,
+            venue,
+            played: played,
+            live: false,
+            lastUpdate: played ? new Date().toISOString() : null
+        });
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            document.getElementById('matchHomeGoals').value = '';
+            document.getElementById('matchAwayGoals').value = '';
+            document.getElementById('matchDatetime').value = '';
+            document.getElementById('matchVenue').value = '';
+            alert(`✅ ${played ? 'Jogo realizado' : 'Próximo jogo'} adicionado!`);
+        }
     };
 
-    window.toggleMatch = function(id) {
+    window.toggleMatch = async function(id) {
         const match = data.matches.find(m => m.id === id);
         if (!match) return;
+        
         if (match.played) {
-            if (match.live) { alert('Pare a transmissão primeiro!'); return; }
+            if (match.live) {
+                alert('Pare a transmissão primeiro!');
+                return;
+            }
             match.played = false;
             match.homeGoals = null;
             match.awayGoals = null;
@@ -1077,141 +1281,398 @@
             match.awayGoals = parseInt(ag) || 0;
             match.lastUpdate = new Date().toISOString();
         }
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    };
-
-    window.deleteMatch = function(id) {
-        if (confirm('Remover este jogo?')) {
-            data.matches = data.matches.filter(m => m.id !== id);
-            saveData(data);
+        
+        if (await saveDataToGitHub()) {
             renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
         }
     };
 
-    window.deleteScorer = function(id) {
-        if (confirm('Remover este artilheiro?')) {
-            data.scorers = data.scorers.filter(s => s.id !== id);
-            saveData(data);
+    window.toggleLive = async function(id) {
+        const match = data.matches.find(m => m.id === id);
+        if (!match) return;
+        if (!match.played) {
+            alert('Finalize o jogo primeiro!');
+            return;
+        }
+        
+        match.live = !match.live;
+        if (match.live) {
+            match.lastUpdate = new Date().toISOString();
+        } else {
+            match.lastUpdate = null;
+        }
+        
+        if (await saveDataToGitHub()) {
             renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
         }
     };
 
-    // Adicionar time
-    document.getElementById('addTeamBtn').addEventListener('click', () => {
-        const name = document.getElementById('teamName').value.trim();
-        const badge = document.getElementById('teamBadge').value.trim().toUpperCase();
-        const color = document.getElementById('teamColor').value;
-        const logo = document.getElementById('teamLogo').value.trim() || '';
-        const group = document.getElementById('teamGroup').value;
-        if (!name || !badge) { alert('Preencha nome e sigla!'); return; }
-        if (data.teams.find(t => t.badge === badge)) { alert('Sigla já existe!'); return; }
-        data.teams.push({ id: generateId(), name, badge, color, logo, group });
-        saveData(data);
-        document.getElementById('teamName').value = '';
-        document.getElementById('teamBadge').value = '';
-        document.getElementById('teamLogo').value = '';
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    });
-
-    // Adicionar jogo
-    function addMatch(played = true) {
-        const homeId = document.getElementById('matchHome').value;
-        const awayId = document.getElementById('matchAway').value;
-        const homeGoalsInput = document.getElementById('matchHomeGoals').value;
-        const awayGoalsInput = document.getElementById('matchAwayGoals').value;
-        const datetime = document.getElementById('matchDatetime').value;
-        const venue = document.getElementById('matchVenue').value.trim() || 'Estádio Municipal';
-        if (!homeId || !awayId || homeId === awayId) { alert('Selecione dois times diferentes!'); return; }
-        if (!datetime) { alert('Selecione a data/hora!'); return; }
-        let homeGoals = null, awayGoals = null;
-        if (played) {
-            if (homeGoalsInput === '' || awayGoalsInput === '') { alert('Preencha os gols!'); return; }
-            homeGoals = parseInt(homeGoalsInput) || 0;
-            awayGoals = parseInt(awayGoalsInput) || 0;
+    window.updateLiveScore = async function(id) {
+        const match = data.matches.find(m => m.id === id);
+        if (!match) {
+            alert('Jogo não encontrado!');
+            return;
         }
-        data.matches.push({
+        if (!match.live) {
+            alert('Este jogo não está AO VIVO.');
+            return;
+        }
+        if (!match.played) {
+            alert('Finalize o jogo primeiro.');
+            return;
+        }
+        
+        const hg = prompt(`Gols do mandante (${getTeamName(match.homeTeamId)}):`, match.homeGoals || 0);
+        if (hg === null) return;
+        const ag = prompt(`Gols do visitante (${getTeamName(match.awayTeamId)}):`, match.awayGoals || 0);
+        if (ag === null) return;
+        
+        match.homeGoals = parseInt(hg) || 0;
+        match.awayGoals = parseInt(ag) || 0;
+        match.lastUpdate = new Date().toISOString();
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            alert(`✅ Placar atualizado: ${getTeamName(match.homeTeamId)} ${match.homeGoals} x ${match.awayGoals} ${getTeamName(match.awayTeamId)}`);
+        }
+    };
+
+    window.deleteMatch = async function(id) {
+        if (!confirm('Remover este jogo?')) return;
+        
+        data.matches = data.matches.filter(m => m.id !== id);
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+        }
+    };
+
+    // ================================================================
+    //  FUNÇÕES CRUD - CARTÕES
+    // ================================================================
+    window.addCard = async function() {
+        const playerName = document.getElementById('cardPlayerName').value.trim();
+        const teamId = document.getElementById('cardTeam').value;
+        const type = document.getElementById('cardType').value;
+        const datetime = document.getElementById('cardDatetime').value;
+        
+        if (!playerName) {
+            alert('Digite o nome do jogador!');
+            return;
+        }
+        if (!teamId) {
+            alert('Selecione o time!');
+            return;
+        }
+        if (!datetime) {
+            alert('Selecione a data/hora do cartão!');
+            return;
+        }
+        
+        data.cards.push({
             id: generateId(),
-            homeTeamId: homeId,
-            awayTeamId: awayId,
-            homeGoals, awayGoals,
-            datetime, venue,
-            played: played,
-            live: false,
-            lastUpdate: played ? new Date().toISOString() : null
+            playerName,
+            teamId,
+            type,
+            datetime,
+            matchId: null
         });
-        saveData(data);
-        document.getElementById('matchHomeGoals').value = '';
-        document.getElementById('matchAwayGoals').value = '';
-        document.getElementById('matchDatetime').value = '';
-        document.getElementById('matchVenue').value = '';
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-        alert(`✅ ${played ? 'Jogo realizado' : 'Próximo jogo'} adicionado!`);
-    }
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            document.getElementById('cardPlayerName').value = '';
+            document.getElementById('cardDatetime').value = '';
+            alert('✅ Cartão adicionado com sucesso!');
+        }
+    };
 
-    document.getElementById('addMatchBtn').addEventListener('click', () => addMatch(true));
-    document.getElementById('addUpcomingBtn').addEventListener('click', () => addMatch(false));
+    window.deleteCard = async function(id) {
+        if (!confirm('Remover este cartão?')) return;
+        
+        data.cards = data.cards.filter(c => c.id !== id);
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+        }
+    };
 
-    // Adicionar artilheiro
-    document.getElementById('addScorerBtn').addEventListener('click', () => {
+    // ================================================================
+    //  FUNÇÕES CRUD - ARTILHEIROS
+    // ================================================================
+    window.addScorer = async function() {
         const name = document.getElementById('scorerName').value.trim();
         const teamId = document.getElementById('scorerTeam').value;
         const goals = parseInt(document.getElementById('scorerGoals').value) || 0;
-        if (!name || !teamId) { alert('Preencha nome e time!'); return; }
+        
+        if (!name || !teamId) {
+            alert('Preencha nome e time!');
+            return;
+        }
+        
         const existing = data.scorers.find(s => s.playerName === name && s.teamId === teamId);
-        if (existing) existing.goals += goals;
-        else data.scorers.push({ id: generateId(), playerName: name, teamId, goals });
-        saveData(data);
-        document.getElementById('scorerName').value = '';
-        document.getElementById('scorerGoals').value = '0';
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+        if (existing) {
+            existing.goals += goals;
+        } else {
+            data.scorers.push({
+                id: generateId(),
+                playerName: name,
+                teamId,
+                goals
+            });
+        }
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            document.getElementById('scorerName').value = '';
+            document.getElementById('scorerGoals').value = '0';
+            alert('✅ Artilheiro atualizado!');
+        }
+    };
+
+    window.deleteScorer = async function(id) {
+        if (!confirm('Remover este artilheiro?')) return;
+        
+        data.scorers = data.scorers.filter(s => s.id !== id);
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+        }
+    };
+
+    // ================================================================
+    //  FUNÇÕES MATA-MATA
+    // ================================================================
+    window.editMataMataMatch = function(fase, index) {
+        const match = data.mataMata[fase][index];
+        if (!match) {
+            alert('Jogo não encontrado!');
+            return;
+        }
+        
+        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
+        const teamOptions = teams.map(t => 
+            `<option value="${t.id}" ${match.home === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
+        ).join('');
+        const awayOptions = teams.map(t => 
+            `<option value="${t.id}" ${match.away === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
+        ).join('');
+        
+        const container = document.getElementById(`${fase}Container`);
+        const children = container.children;
+        
+        if (children[index]) {
+            const editDiv = document.createElement('div');
+            editDiv.className = 'edit-form';
+            editDiv.id = `edit-${fase}-${index}`;
+            editDiv.innerHTML = `
+                <h4 style="margin-bottom:12px;color:#2E7D32;">Editar Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
+                <div class="form-row">
+                    <label>Mandante
+                        <select id="editHomeTeam_${fase}_${index}">${teamOptions}</select>
+                    </label>
+                    <label>Visitante
+                        <select id="editAwayTeam_${fase}_${index}">${awayOptions}</select>
+                    </label>
+                    <label>Gols Mandante
+                        <input type="number" id="editHomeGoals_${fase}_${index}" value="${match.homeGoals !== null ? match.homeGoals : ''}" placeholder="—" />
+                    </label>
+                    <label>Gols Visitante
+                        <input type="number" id="editAwayGoals_${fase}_${index}" value="${match.awayGoals !== null ? match.awayGoals : ''}" placeholder="—" />
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-success" onclick="saveMataMataMatch('${fase}', ${index})"><i class="fas fa-save"></i> Salvar</button>
+                    <button class="btn btn-outline" onclick="renderAllAdmin()"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            `;
+            children[index].replaceWith(editDiv);
+        }
+    };
+
+    window.saveMataMataMatch = async function(fase, index) {
+        const homeId = document.getElementById(`editHomeTeam_${fase}_${index}`).value;
+        const awayId = document.getElementById(`editAwayTeam_${fase}_${index}`).value;
+        const homeGoals = document.getElementById(`editHomeGoals_${fase}_${index}`).value;
+        const awayGoals = document.getElementById(`editAwayGoals_${fase}_${index}`).value;
+        
+        if (!homeId || !awayId) {
+            alert('Selecione os dois times!');
+            return;
+        }
+        if (homeId === awayId) {
+            alert('Os times devem ser diferentes!');
+            return;
+        }
+        
+        data.mataMata[fase][index] = {
+            home: homeId,
+            away: awayId,
+            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
+            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
+        };
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            alert('✅ Jogo atualizado!');
+        }
+    };
+
+    window.removeMataMataMatch = async function(fase, index) {
+        if (!confirm(`Remover este jogo da ${fase}?`)) return;
+        
+        data.mataMata[fase].splice(index, 1);
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+        }
+    };
+
+    function addMataMataMatch(fase) {
+        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
+        if (teams.length < 2) {
+            alert('Adicione pelo menos 2 times primeiro!');
+            return;
+        }
+        
+        const teamOptions = teams.map(t => `<option value="${t.id}">${t.badge} - ${t.name}</option>`).join('');
+        const container = document.getElementById(`${fase}Container`);
+        
+        // Remove formulários anteriores
+        const existingForms = container.querySelectorAll('.edit-form');
+        existingForms.forEach(el => el.remove());
+        
+        const editDiv = document.createElement('div');
+        editDiv.className = 'edit-form';
+        editDiv.innerHTML = `
+            <h4 style="margin-bottom:12px;color:#2E7D32;">Novo Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
+            <div class="form-row">
+                <label>Mandante
+                    <select id="newHomeTeam_${fase}">${teamOptions}</select>
+                </label>
+                <label>Visitante
+                    <select id="newAwayTeam_${fase}">${teamOptions}</select>
+                </label>
+                <label>Gols Mandante
+                    <input type="number" id="newHomeGoals_${fase}" placeholder="—" />
+                </label>
+                <label>Gols Visitante
+                    <input type="number" id="newAwayGoals_${fase}" placeholder="—" />
+                </label>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-success" onclick="saveNewMataMataMatch('${fase}')"><i class="fas fa-save"></i> Adicionar</button>
+                <button class="btn btn-outline" onclick="renderAllAdmin()"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+        `;
+        container.appendChild(editDiv);
+    }
+
+    window.saveNewMataMataMatch = async function(fase) {
+        const homeId = document.getElementById(`newHomeTeam_${fase}`).value;
+        const awayId = document.getElementById(`newAwayTeam_${fase}`).value;
+        const homeGoals = document.getElementById(`newHomeGoals_${fase}`).value;
+        const awayGoals = document.getElementById(`newAwayGoals_${fase}`).value;
+        
+        if (!homeId || !awayId) {
+            alert('Selecione os dois times!');
+            return;
+        }
+        if (homeId === awayId) {
+            alert('Os times devem ser diferentes!');
+            return;
+        }
+        
+        data.mataMata[fase].push({
+            home: homeId,
+            away: awayId,
+            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
+            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
+        });
+        
+        if (await saveDataToGitHub()) {
+            renderAllAdmin();
+            alert('✅ Jogo adicionado!');
+        }
+    };
+
+    // ================================================================
+    //  BOTÕES DE AÇÃO
+    // ================================================================
+    document.getElementById('addTeamBtn').addEventListener('click', window.addTeam);
+    document.getElementById('addMatchBtn').addEventListener('click', () => window.addMatch(true));
+    document.getElementById('addUpcomingBtn').addEventListener('click', () => window.addMatch(false));
+    document.getElementById('addCardBtn').addEventListener('click', window.addCard);
+    document.getElementById('addScorerBtn').addEventListener('click', window.addScorer);
+    
+    document.getElementById('addQuartasBtn').addEventListener('click', () => addMataMataMatch('quartas'));
+    document.getElementById('addSemiBtn').addEventListener('click', () => addMataMataMatch('semi'));
+    document.getElementById('addFinalBtn').addEventListener('click', () => addMataMataMatch('final'));
+
+    document.getElementById('resetMataMataBtn').addEventListener('click', async () => {
+        if (confirm('Resetar toda a fase mata-mata?')) {
+            data.mataMata = { quartas: [], semi: [], final: [] };
+            if (await saveDataToGitHub()) {
+                renderAllAdmin();
+                alert('✅ Mata-Mata resetado!');
+            }
+        }
     });
 
-    // Simular rodada
-    document.getElementById('simulateBtn').addEventListener('click', () => {
-        if (data.teams.length < 2) { alert('Adicione pelo menos 2 times!'); return; }
+    document.getElementById('simulateBtn').addEventListener('click', async () => {
+        if (data.teams.length < 2) {
+            alert('Adicione pelo menos 2 times!');
+            return;
+        }
+        
         const shuffled = [...data.teams];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
+        
         for (let i = 0; i < shuffled.length - 1; i += 2) {
-            const home = shuffled[i], away = shuffled[i + 1];
-            const hg = Math.floor(Math.random() * 4), ag = Math.floor(Math.random() * 4);
+            const home = shuffled[i];
+            const away = shuffled[i + 1];
+            const hg = Math.floor(Math.random() * 4);
+            const ag = Math.floor(Math.random() * 4);
             const now = new Date();
             now.setDate(now.getDate() + Math.floor(Math.random() * 7));
+            
             data.matches.push({
                 id: generateId(),
-                homeTeamId: home.id, awayTeamId: away.id,
-                homeGoals: hg, awayGoals: ag,
+                homeTeamId: home.id,
+                awayTeamId: away.id,
+                homeGoals: hg,
+                awayGoals: ag,
                 datetime: now.toISOString(),
                 venue: 'Estádio Municipal',
-                played: true, live: false,
+                played: true,
+                live: false,
                 lastUpdate: new Date().toISOString()
             });
         }
-        saveData(data);
-        renderAllAdmin();
-        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-    });
-
-    // Resetar tudo
-    document.getElementById('resetBtn').addEventListener('click', () => {
-        if (confirm('Tem certeza? Todos os dados serão perdidos!')) {
-            data = getDefaultData();
-            saveData(data);
+        
+        if (await saveDataToGitHub()) {
             renderAllAdmin();
-            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+            alert('✅ Rodada simulada!');
         }
     });
 
-    // Exportar
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+        if (confirm('Tem certeza? Todos os dados serão perdidos!')) {
+            data = getDefaultData();
+            if (await saveDataToGitHub()) {
+                renderAllAdmin();
+                alert('✅ Dados resetados!');
+            }
+        }
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', async () => {
+        await loadDataFromGitHub();
+        renderAllAdmin();
+        alert('✅ Dados recarregados!');
+    });
+
+    // ================================================================
+    //  EXPORT / IMPORT
+    // ================================================================
     document.getElementById('exportBtn').addEventListener('click', () => {
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -1222,52 +1683,45 @@
         URL.revokeObjectURL(url);
     });
 
-    // Importar
-    document.getElementById('importBtn').addEventListener('click', () => document.getElementById('fileInput').click());
-    document.getElementById('fileInput').addEventListener('change', (e) => {
+    document.getElementById('importBtn').addEventListener('click', () => {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
+        reader.onload = async (ev) => {
             try {
                 const imported = JSON.parse(ev.target.result);
                 if (imported.teams && imported.matches !== undefined) {
                     data = imported;
-                    saveData(data);
-                    renderAllAdmin();
-                    window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
-                    alert('Dados importados com sucesso!');
+                    if (await saveDataToGitHub()) {
+                        renderAllAdmin();
+                        alert('✅ Dados importados com sucesso!');
+                    }
                 } else {
-                    alert('Arquivo inválido.');
+                    alert('❌ Arquivo inválido.');
                 }
-            } catch (err) { alert('Erro ao ler arquivo.'); }
+            } catch (err) {
+                alert('❌ Erro ao ler arquivo.');
+            }
         };
         reader.readAsText(file);
         e.target.value = '';
     });
 
     // ================================================================
-    //  RENDER ALL ADMIN
-    // ================================================================
-    function renderAllAdmin() {
-        populateSelects();
-        renderTeamChips();
-        renderMatchesTable();
-        renderScorersTable();
-        renderMataMataAdmin();
-        renderCardsAdmin();
-    }
-
-    // ================================================================
     //  INICIALIZAÇÃO
     // ================================================================
     checkAuth();
 
-    setInterval(() => {
-        data = loadData();
-        if (!loginScreen.classList.contains('hidden')) return;
+    // Atualiza a cada 60 segundos (só recarrega, não salva)
+    setInterval(async () => {
+        if (document.getElementById('adminPanel').classList.contains('hidden')) return;
+        await loadDataFromGitHub();
         renderAllAdmin();
-    }, 30000);
+    }, 60000);
 </script>
 </body>
 </html>

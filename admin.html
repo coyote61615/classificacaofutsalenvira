@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Administrativo - Campeonato Municipal</title>
+    <title>Painel Administrativo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         /* ===== RESET ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #f5f7fa;
@@ -23,10 +22,7 @@
             justify-content: center;
             align-items: flex-start;
         }
-        .container {
-            max-width: 1300px;
-            width: 100%;
-        }
+        .container { max-width: 1300px; width: 100%; }
 
         /* ===== LOGIN ===== */
         .login-box {
@@ -39,15 +35,8 @@
             border-top: 6px solid #FFC107;
             text-align: center;
         }
-        .login-box h2 {
-            font-size: 1.8rem;
-            color: #2E7D32;
-            margin-bottom: 8px;
-        }
-        .login-box p {
-            color: #6c7a8a;
-            margin-bottom: 24px;
-        }
+        .login-box h2 { font-size: 1.8rem; color: #2E7D32; margin-bottom: 8px; }
+        .login-box p { color: #6c7a8a; margin-bottom: 24px; }
         .login-box input {
             width: 100%;
             padding: 14px 18px;
@@ -55,12 +44,9 @@
             border-radius: 12px;
             font-size: 1rem;
             margin-bottom: 16px;
-            transition: 0.2s;
             outline: none;
         }
-        .login-box input:focus {
-            border-color: #4CAF50;
-        }
+        .login-box input:focus { border-color: #4CAF50; }
         .login-box .btn {
             width: 100%;
             padding: 14px;
@@ -71,17 +57,9 @@
             cursor: pointer;
             background: #4CAF50;
             color: #fff;
-            transition: 0.2s;
         }
-        .login-box .btn:hover {
-            background: #2E7D32;
-        }
-        .login-error {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            display: none;
-        }
+        .login-box .btn:hover { background: #2E7D32; }
+        .login-error { color: #e74c3c; font-size: 0.9rem; margin-top: 10px; display: none; }
 
         /* ===== ADMIN HEADER ===== */
         .admin-header {
@@ -97,42 +75,16 @@
             margin-bottom: 30px;
             border-left: 6px solid #FFC107;
         }
-        .admin-header h1 {
-            font-size: 1.4rem;
-            color: #2E7D32;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .admin-header h1 i {
-            color: #FFC107;
-        }
-        .admin-header .status {
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .admin-header h1 { font-size: 1.4rem; color: #2E7D32; display: flex; align-items: center; gap: 12px; }
+        .admin-header h1 i { color: #FFC107; }
+        .admin-header .status { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
         .admin-header .status .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
+            width: 10px; height: 10px; border-radius: 50%; display: inline-block;
         }
-        .admin-header .status .dot.online {
-            background: #27ae60;
-        }
-        .admin-header .status .dot.offline {
-            background: #e74c3c;
-        }
-        .admin-header .status .dot.saving {
-            background: #f39c12;
-            animation: pulse 0.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+        .admin-header .status .dot.online { background: #27ae60; }
+        .admin-header .status .dot.offline { background: #e74c3c; }
+        .admin-header .status .dot.saving { background: #f39c12; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* ===== CARDS ===== */
         .card {
@@ -143,23 +95,8 @@
             margin-bottom: 24px;
             border-top: 4px solid #FFC107;
         }
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #2E7D32;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .card-title i {
-            color: #FFC107;
-        }
-        .card-subtitle {
-            font-size: 0.9rem;
-            color: #6c7a8a;
-            margin-bottom: 16px;
-        }
+        .card-title { font-size: 1.2rem; font-weight: 700; color: #2E7D32; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: #FFC107; }
 
         /* ===== FORMULÁRIOS ===== */
         .form-grid {
@@ -167,35 +104,17 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 16px;
         }
-        .form-grid label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #37474F;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .form-grid input,
-        .form-grid select {
+        .form-grid label { font-size: 0.85rem; font-weight: 600; color: #37474F; display: flex; flex-direction: column; gap: 4px; }
+        .form-grid input, .form-grid select {
             padding: 10px 14px;
             border: 2px solid #e9ecef;
             border-radius: 10px;
             font-size: 0.9rem;
-            transition: 0.2s;
             outline: none;
             background: #fafbfc;
         }
-        .form-grid input:focus,
-        .form-grid select:focus {
-            border-color: #4CAF50;
-            background: #fff;
-        }
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
+        .form-grid input:focus, .form-grid select:focus { border-color: #4CAF50; background: #fff; }
+        .form-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 
         /* ===== BOTÕES ===== */
         .btn {
@@ -210,90 +129,26 @@
             align-items: center;
             gap: 8px;
         }
-        .btn-success {
-            background: #4CAF50;
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #2E7D32;
-            transform: translateY(-2px);
-        }
-        .btn-danger {
-            background: #e74c3c;
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #4CAF50;
-            color: #4CAF50;
-        }
-        .btn-outline:hover {
-            background: #4CAF50;
-            color: #fff;
-        }
-        .btn-amarelo {
-            background: #FFC107;
-            color: #333;
-        }
-        .btn-amarelo:hover {
-            background: #F9A825;
-        }
-        .btn-ao-vivo {
-            background: #ff4757;
-            color: #fff;
-        }
-        .btn-ao-vivo:hover {
-            background: #c0392b;
-        }
-        .btn-ao-vivo.active {
-            background: #2ecc71;
-        }
-        .btn-ao-vivo.active:hover {
-            background: #27ae60;
-        }
-        .btn-roxo {
-            background: #6c5ce7;
-            color: #fff;
-        }
-        .btn-roxo:hover {
-            background: #5a4bd1;
-        }
-        .btn-mata-mata {
-            background: #e67e22;
-            color: #fff;
-        }
-        .btn-mata-mata:hover {
-            background: #d35400;
-        }
-        .btn-card-amarelo {
-            background: #f39c12;
-            color: #fff;
-        }
-        .btn-card-amarelo:hover {
-            background: #d68910;
-        }
-        .btn-card-vermelho {
-            background: #e74c3c;
-            color: #fff;
-        }
-        .btn-card-vermelho:hover {
-            background: #c0392b;
-        }
-        .btn-small {
-            padding: 4px 12px;
-            font-size: 0.7rem;
-        }
+        .btn-success { background: #4CAF50; color: #fff; }
+        .btn-success:hover { background: #2E7D32; transform: translateY(-2px); }
+        .btn-danger { background: #e74c3c; color: #fff; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-outline { background: transparent; border: 2px solid #4CAF50; color: #4CAF50; }
+        .btn-outline:hover { background: #4CAF50; color: #fff; }
+        .btn-amarelo { background: #FFC107; color: #333; }
+        .btn-amarelo:hover { background: #F9A825; }
+        .btn-ao-vivo { background: #ff4757; color: #fff; }
+        .btn-ao-vivo:hover { background: #c0392b; }
+        .btn-ao-vivo.active { background: #2ecc71; }
+        .btn-ao-vivo.active:hover { background: #27ae60; }
+        .btn-roxo { background: #6c5ce7; color: #fff; }
+        .btn-roxo:hover { background: #5a4bd1; }
+        .btn-small { padding: 4px 12px; font-size: 0.7rem; }
+        .btn-card-amarelo { background: #f39c12; color: #fff; }
+        .btn-card-amarelo:hover { background: #d68910; }
 
         /* ===== CHIPS ===== */
-        .chip-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 12px;
-        }
+        .chip-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
         .chip {
             background: #f0f4f8;
             padding: 6px 14px 6px 10px;
@@ -304,28 +159,11 @@
             font-size: 0.85rem;
             border: 1px solid #e0ece2;
         }
-        .chip .color-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .chip .remove-btn {
-            background: none;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-        .chip .remove-btn:hover {
-            color: #c0392b;
-        }
+        .chip .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+        .chip .remove-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
 
         /* ===== TABELAS ===== */
-        .table-wrap {
-            overflow-x: auto;
-        }
+        .table-wrap { overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -341,92 +179,17 @@
             color: #2E7D32;
             border-bottom: 2px solid #FFC107;
         }
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #e9ecef;
-            vertical-align: middle;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
+        td { padding: 10px; border-bottom: 1px solid #e9ecef; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
 
         /* ===== STATUS ===== */
-        .hidden {
-            display: none !important;
-        }
-        .live-badge {
-            background: #ff4757;
-            color: #fff;
-            padding: 2px 12px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .live-badge.active {
-            background: #2ecc71;
-        }
-        .status-pendente {
-            color: #f39c12;
-            font-weight: 600;
-        }
-        .status-realizado {
-            color: #27ae60;
-            font-weight: 600;
-        }
-        .status-ao-vivo {
-            color: #e74c3c;
-            font-weight: 600;
-            animation: pulse-text 1.5s infinite;
-        }
-        @keyframes pulse-text {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* ===== MATA-MATA ADMIN ===== */
-        .mata-mata-match-admin {
-            background: #f8fdf9;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 10px;
-            border-left: 4px solid #e67e22;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .mata-mata-match-admin .match-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .mata-mata-match-admin .match-teams {
-            font-weight: 600;
-        }
-        .mata-mata-match-admin .match-score {
-            font-weight: 700;
-            color: #e67e22;
-            background: #FFF8E1;
-            padding: 2px 14px;
-            border-radius: 40px;
-        }
-        .mata-mata-match-admin .match-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .mata-mata-round-title {
-            background: #e67e22;
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 12px;
-        }
+        .hidden { display: none !important; }
+        .live-badge { background: #ff4757; color: #fff; padding: 2px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; }
+        .live-badge.active { background: #2ecc71; }
+        .status-pendente { color: #f39c12; font-weight: 600; }
+        .status-realizado { color: #27ae60; font-weight: 600; }
+        .status-ao-vivo { color: #e74c3c; font-weight: 600; animation: pulse-text 1.5s infinite; }
+        @keyframes pulse-text { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* ===== CARTÕES ADMIN ===== */
         .card-item-admin {
@@ -441,95 +204,18 @@
             gap: 8px;
             border-left: 4px solid #f39c12;
         }
-        .card-item-admin .card-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .card-item-admin .card-type {
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-        }
-        .card-item-admin .card-type.amarillo {
-            background: #FFF8E1;
-            color: #f39c12;
-            border: 1px solid #f39c12;
-        }
-        .card-item-admin .card-type.vermelho {
-            background: #FFEBEE;
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
-        }
+        .card-item-admin .card-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .card-item-admin .card-type { font-weight: 700; padding: 2px 12px; border-radius: 40px; font-size: 0.75rem; }
+        .card-item-admin .card-type.amarillo { background: #FFF8E1; color: #f39c12; border: 1px solid #f39c12; }
+        .card-item-admin .card-type.vermelho { background: #FFEBEE; color: #e74c3c; border: 1px solid #e74c3c; }
 
-        /* ===== EDIT FORM ===== */
-        .edit-form {
-            background: #f8fdf9;
-            padding: 16px;
-            border-radius: 12px;
-            margin: 8px 0;
-            border: 2px solid #e67e22;
-        }
-        .edit-form .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-        }
-        .edit-form .form-row label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .edit-form .form-row input,
-        .edit-form .form-row select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 0.9rem;
-        }
-        .edit-form .form-actions {
-            margin-top: 12px;
-            display: flex;
-            gap: 8px;
-        }
-
-        /* ===== RESPONSIVO ===== */
         @media (max-width: 600px) {
-            .login-box {
-                padding: 24px;
-                margin: 40px auto;
-            }
-            .admin-header {
-                padding: 14px 18px;
-            }
-            .card {
-                padding: 16px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            td {
-                font-size: 0.8rem;
-                padding: 6px;
-            }
-            .btn {
-                padding: 6px 12px;
-                font-size: 0.7rem;
-            }
-            .mata-mata-match-admin {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .mata-mata-match-admin .match-actions {
-                justify-content: flex-start;
-            }
-            .edit-form .form-row {
-                grid-template-columns: 1fr;
-            }
+            .login-box { padding: 24px; margin: 40px auto; }
+            .admin-header { padding: 14px 18px; }
+            .card { padding: 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            td { font-size: 0.8rem; padding: 6px; }
+            .btn { padding: 6px 12px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -558,7 +244,7 @@
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                 <span class="status">
                     <span class="dot online" id="statusDot"></span>
-                    <span id="statusText">Pronto</span>
+                    <span id="statusText">Conectando...</span>
                 </span>
                 <button class="btn btn-outline" id="exportBtn"><i class="fas fa-download"></i> Exportar</button>
                 <button class="btn btn-outline" id="importBtn"><i class="fas fa-upload"></i> Importar</button>
@@ -620,39 +306,6 @@
             </div>
         </div>
 
-        <!-- ===== MATA-MATA ===== -->
-        <div class="card" style="border-top-color:#e67e22;">
-            <div class="card-title"><i class="fas fa-flag-checkered" style="color:#e67e22;"></i> Fase Mata-Mata</div>
-            <div class="card-subtitle">
-                <i class="fas fa-info-circle"></i> Gerencie os jogos das fases eliminatórias
-            </div>
-            
-            <!-- Quartas -->
-            <div style="margin-bottom:24px;">
-                <div class="mata-mata-round-title">🏆 Quartas de Final</div>
-                <div id="quartasContainer"></div>
-                <button class="btn btn-mata-mata" id="addQuartasBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
-            </div>
-
-            <!-- Semifinais -->
-            <div style="margin-bottom:24px;">
-                <div class="mata-mata-round-title">🏆 Semifinais</div>
-                <div id="semiContainer"></div>
-                <button class="btn btn-mata-mata" id="addSemiBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
-            </div>
-
-            <!-- Final -->
-            <div style="margin-bottom:16px;">
-                <div class="mata-mata-round-title" style="background:#FFC107;color:#333;">🏆 Final</div>
-                <div id="finalContainer"></div>
-                <button class="btn btn-mata-mata" id="addFinalBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
-            </div>
-
-            <div class="form-actions" style="margin-top:12px; border-top:1px solid #e9ecef; padding-top:16px;">
-                <button class="btn btn-danger" id="resetMataMataBtn"><i class="fas fa-undo-alt"></i> Resetar Mata-Mata</button>
-            </div>
-        </div>
-
         <!-- ===== CARTÕES ===== -->
         <div class="card" style="border-top-color:#f39c12;">
             <div class="card-title"><i class="fas fa-card" style="color:#f39c12;"></i> Gerenciar Cartões</div>
@@ -708,201 +361,35 @@
 
 <script>
     // ================================================================
-    //  CONFIGURAÇÃO DO GITHUB
+    //  CONFIGURAÇÃO DO FIREBASE - SUAS CREDENCIAIS
     // ================================================================
-    // ⚠️ SUBSTITUA ESTAS VARIÁVEIS COM SEUS DADOS ⚠️
-    const GITHUB_TOKEN = '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'; // Cole seu token gerado no GitHub
-    const GITHUB_USER = 'coyote61615'; // Seu nome de usuário do GitHub
-    const GITHUB_REPO = 'classificacaofutsalenvira'; // Nome do repositório
-    const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/dados.json`;
-
-    // ================================================================
-    //  BANCO DE DADOS
-    // ================================================================
-    let data = {};
-
-    function getDefaultData() {
-        return {
-            teams: [
-                { id: 't1', name: 'OBRAS', badge: 'OBR', color: '#d62828', logo: 'images/obras.png', group: 'A' },
-                { id: 't2', name: 'LIMOEIRO', badge: 'LIM', color: '#1a7a3a', logo: 'images/limoeiro.png', group: 'A' },
-                { id: 't3', name: 'BUJARU', badge: 'BUJ', color: '#231f20', logo: 'images/bujaru.png', group: 'A' },
-                { id: 't4', name: 'LUCRISCAR', badge: 'LUC', color: '#c52b2b', logo: 'images/lucriscar.png', group: 'A' },
-                { id: 't5', name: 'CRUZEIRO', badge: 'CRU', color: '#000000', logo: 'images/cruzeiro.png', group: 'A' },
-                { id: 't6', name: 'INDUSTRIAL', badge: 'IND', color: '#e01a2f', logo: 'images/industrial.png', group: 'A' },
-                { id: 't7', name: 'SHOUSE', badge: 'SHO', color: '#8e44ad', logo: 'images/shouser.png', group: 'A' },
-                { id: 't8', name: 'ESMAC', badge: 'ESM', color: '#2980b9', logo: 'images/esmac.png', group: 'B' },
-                { id: 't9', name: 'CLUBE DO REMO', badge: 'REM', color: '#27ae60', logo: 'images/remo.png', group: 'B' },
-                { id: 't10', name: 'INDEPENDENTE', badge: 'IND', color: '#f39c12', logo: 'images/independente.png', group: 'B' },
-                { id: 't11', name: 'ARFAS SOURE', badge: 'ARF', color: '#8e44ad', logo: 'images/arfas.png', group: 'B' },
-                { id: 't12', name: 'PAYSANDU', badge: 'PAY', color: '#2c3e50', logo: 'images/paysandu.png', group: 'B' },
-                { id: 't13', name: 'TUNA LUSO', badge: 'TUN', color: '#d35400', logo: 'images/tuna.png', group: 'B' },
-                { id: 't14', name: 'CASTANHAL', badge: 'CAS', color: '#16a085', logo: 'images/castanhal.png', group: 'B' }
-            ],
-            matches: [
-                { id: 'm1', homeTeamId: 't1', awayTeamId: 't2', homeGoals: 3, awayGoals: 1, datetime: '2026-08-10T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm2', homeTeamId: 't3', awayTeamId: 't4', homeGoals: 2, awayGoals: 2, datetime: '2026-08-10T18:30', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm3', homeTeamId: 't5', awayTeamId: 't6', homeGoals: 4, awayGoals: 1, datetime: '2026-08-11T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm4', homeTeamId: 't1', awayTeamId: 't3', homeGoals: 5, awayGoals: 0, datetime: '2026-08-13T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm5', homeTeamId: 't2', awayTeamId: 't5', homeGoals: 2, awayGoals: 0, datetime: '2026-08-13T18:30', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm6', homeTeamId: 't4', awayTeamId: 't6', homeGoals: 3, awayGoals: 1, datetime: '2026-08-14T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm7', homeTeamId: 't1', awayTeamId: 't4', homeGoals: 4, awayGoals: 0, datetime: '2026-08-16T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm8', homeTeamId: 't2', awayTeamId: 't6', homeGoals: 6, awayGoals: 2, datetime: '2026-08-16T18:30', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm9', homeTeamId: 't3', awayTeamId: 't5', homeGoals: 3, awayGoals: 1, datetime: '2026-08-17T16:00', venue: 'Estádio A', played: true, live: false, lastUpdate: null },
-                { id: 'm10', homeTeamId: 't8', awayTeamId: 't9', homeGoals: 4, awayGoals: 1, datetime: '2026-08-10T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm11', homeTeamId: 't10', awayTeamId: 't11', homeGoals: 1, awayGoals: 1, datetime: '2026-08-10T18:30', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm12', homeTeamId: 't12', awayTeamId: 't13', homeGoals: 3, awayGoals: 0, datetime: '2026-08-11T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm13', homeTeamId: 't8', awayTeamId: 't10', homeGoals: 5, awayGoals: 0, datetime: '2026-08-13T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm14', homeTeamId: 't9', awayTeamId: 't12', homeGoals: 2, awayGoals: 0, datetime: '2026-08-13T18:30', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm15', homeTeamId: 't11', awayTeamId: 't13', homeGoals: 3, awayGoals: 2, datetime: '2026-08-14T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm16', homeTeamId: 't8', awayTeamId: 't11', homeGoals: 6, awayGoals: 1, datetime: '2026-08-16T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm17', homeTeamId: 't9', awayTeamId: 't13', homeGoals: 4, awayGoals: 1, datetime: '2026-08-16T18:30', venue: 'Estádio B', played: true, live: false, lastUpdate: null },
-                { id: 'm18', homeTeamId: 't10', awayTeamId: 't12', homeGoals: 2, awayGoals: 1, datetime: '2026-08-17T16:00', venue: 'Estádio B', played: true, live: false, lastUpdate: null }
-            ],
-            scorers: [
-                { id: 's1', playerName: 'Joãozinho', teamId: 't1', goals: 8 },
-                { id: 's2', playerName: 'Carlos', teamId: 't8', goals: 7 },
-                { id: 's3', playerName: 'Pedro', teamId: 't2', goals: 6 },
-                { id: 's4', playerName: 'Lucas', teamId: 't9', goals: 5 },
-                { id: 's5', playerName: 'Rafael', teamId: 't3', goals: 4 }
-            ],
-            cards: [
-                { id: 'c1', playerName: 'Marcos', teamId: 't1', type: 'amarelo', matchId: null, datetime: '2026-08-10T16:15' },
-                { id: 'c2', playerName: 'Anderson', teamId: 't2', type: 'vermelho', matchId: null, datetime: '2026-08-10T16:30' },
-                { id: 'c3', playerName: 'Rafael', teamId: 't3', type: 'amarelo', matchId: null, datetime: '2026-08-10T18:45' },
-                { id: 'c4', playerName: 'Paulo', teamId: 't8', type: 'amarelo', matchId: null, datetime: '2026-08-10T16:20' },
-                { id: 'c5', playerName: 'Thiago', teamId: 't9', type: 'vermelho', matchId: null, datetime: '2026-08-10T16:35' }
-            ],
-            mataMata: {
-                quartas: [
-                    { home: 't1', away: 't14', homeGoals: null, awayGoals: null },
-                    { home: 't8', away: 't7', homeGoals: null, awayGoals: null },
-                    { home: 't2', away: 't13', homeGoals: null, awayGoals: null },
-                    { home: 't9', away: 't6', homeGoals: null, awayGoals: null }
-                ],
-                semi: [
-                    { home: null, away: null, homeGoals: null, awayGoals: null },
-                    { home: null, away: null, homeGoals: null, awayGoals: null }
-                ],
-                final: [
-                    { home: null, away: null, homeGoals: null, awayGoals: null }
-                ]
-            },
-            config: {
-                prefeituraLogo: 'images/prefeitura.png',
-                campeonatoNome: 'Campeonato Municipal',
-                temporada: '2026'
-            },
-            lastUpdate: new Date().toISOString()
-        };
-    }
+    const firebaseConfig = {
+        apiKey: "AIzaSyAm72c66HqQed20ZE2OgF103ogZAOh551I",
+        authDomain: "campeonato-municipal-01.firebaseapp.com",
+        databaseURL: "https://campeonato-municipal-01-default-rtdb.firebaseio.com",
+        projectId: "campeonato-municipal-01",
+        storageBucket: "campeonato-municipal-01.firebasestorage.app",
+        messagingSenderId: "282025525762",
+        appId: "1:282025525762:web:e1adce20d11d3dd782dd1b"
+    };
 
     // ================================================================
-    //  FUNÇÕES DE SINCronização COM GITHUB
+    //  INICIALIZAR FIREBASE
     // ================================================================
-    function setStatus(status, message) {
-        const dot = document.getElementById('statusDot');
-        const text = document.getElementById('statusText');
-        dot.className = 'dot ' + status;
-        text.textContent = message;
-    }
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    async function saveDataToGitHub() {
-        try {
-            setStatus('saving', 'Salvando...');
-            
-            // Atualiza a data da última modificação
-            data.lastUpdate = new Date().toISOString();
-            
-            // Busca o SHA atual do arquivo
-            let sha = null;
-            try {
-                const getResponse = await fetch(GITHUB_API_URL, {
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                if (getResponse.ok) {
-                    const fileInfo = await getResponse.json();
-                    sha = fileInfo.sha;
-                }
-            } catch (e) {
-                // Arquivo ainda não existe, vai criar
-            }
-
-            // Prepara o conteúdo em base64
-            const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-            
-            // Envia para o GitHub
-            const response = await fetch(GITHUB_API_URL, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                body: JSON.stringify({
-                    message: `Atualização automática - ${new Date().toLocaleString()}`,
-                    content: content,
-                    sha: sha
-                })
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Erro ao salvar no GitHub');
-            }
-
-            setStatus('online', 'Salvo com sucesso!');
-            return true;
-        } catch (error) {
-            console.error('Erro ao salvar:', error);
-            setStatus('offline', 'Erro ao salvar');
-            alert('❌ Erro ao salvar no GitHub: ' + error.message);
-            return false;
-        }
-    }
-
-    async function loadDataFromGitHub() {
-        try {
-            setStatus('saving', 'Carregando...');
-            
-            const response = await fetch(GITHUB_API_URL + '?t=' + Date.now(), {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            if (!response.ok) {
-                if (response.status === 404) {
-                    // Arquivo não existe, cria com dados padrão
-                    data = getDefaultData();
-                    await saveDataToGitHub();
-                    setStatus('online', 'Dados criados');
-                    return data;
-                }
-                throw new Error('Erro ao carregar dados');
-            }
-
-            const fileInfo = await response.json();
-            const content = JSON.parse(atob(fileInfo.content));
-            data = content;
-            
-            setStatus('online', 'Dados carregados');
-            return data;
-        } catch (error) {
-            console.error('Erro ao carregar:', error);
-            setStatus('offline', 'Erro ao carregar');
-            
-            // Fallback para dados padrão
-            if (!data || Object.keys(data).length === 0) {
-                data = getDefaultData();
-            }
-            return data;
-        }
-    }
+    // ================================================================
+    //  ESTADO GLOBAL
+    // ================================================================
+    let data = {
+        teams: [],
+        matches: [],
+        scorers: [],
+        cards: [],
+        mataMata: { quartas: [], semi: [], final: [] },
+        config: { prefeituraLogo: 'images/prefeitura.png', campeonatoNome: 'Campeonato Municipal', temporada: '2026' }
+    };
 
     // ================================================================
     //  FUNÇÕES AUXILIARES
@@ -920,16 +407,6 @@
         return t ? t.name : '?';
     }
 
-    function getTeamBadge(id) {
-        const t = getTeam(id);
-        return t ? t.badge : '?';
-    }
-
-    function getTeamColor(id) {
-        const t = getTeam(id);
-        return t ? t.color : '#2a3f52';
-    }
-
     function formatDate(dt) {
         if (!dt) return '—';
         const d = new Date(dt);
@@ -940,6 +417,110 @@
             hour: '2-digit',
             minute: '2-digit'
         });
+    }
+
+    function setStatus(status, message) {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        if (dot && text) {
+            dot.className = 'dot ' + status;
+            text.textContent = message;
+        }
+    }
+
+    // ================================================================
+    //  SALVAR DADOS NO FIREBASE
+    // ================================================================
+    async function saveDataToFirebase() {
+        try {
+            setStatus('saving', 'Salvando...');
+            
+            const batch = db.batch();
+            
+            // Teams
+            data.teams.forEach(team => {
+                const ref = db.collection('teams').doc(team.id);
+                batch.set(ref, team);
+            });
+            
+            // Matches
+            data.matches.forEach(match => {
+                const ref = db.collection('matches').doc(match.id);
+                batch.set(ref, match);
+            });
+            
+            // Scorers
+            data.scorers.forEach(scorer => {
+                const ref = db.collection('scorers').doc(scorer.id);
+                batch.set(ref, scorer);
+            });
+            
+            // Cards
+            data.cards.forEach(card => {
+                const ref = db.collection('cards').doc(card.id);
+                batch.set(ref, card);
+            });
+            
+            // MataMata
+            const mataMataRef = db.collection('mataMata').doc('config');
+            batch.set(mataMataRef, data.mataMata);
+            
+            // Config
+            const configRef = db.collection('config').doc('config');
+            batch.set(configRef, data.config);
+            
+            await batch.commit();
+            
+            setStatus('online', '✅ Salvo com sucesso!');
+            return true;
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            setStatus('offline', '❌ Erro ao salvar');
+            alert('❌ Erro ao salvar: ' + error.message);
+            return false;
+        }
+    }
+
+    // ================================================================
+    //  CARREGAR DADOS DO FIREBASE
+    // ================================================================
+    async function loadDataFromFirebase() {
+        try {
+            setStatus('saving', 'Carregando...');
+            
+            const [teamsSnap, matchesSnap, scorersSnap, cardsSnap, mataMataSnap, configSnap] = await Promise.all([
+                db.collection('teams').get(),
+                db.collection('matches').get(),
+                db.collection('scorers').get(),
+                db.collection('cards').get(),
+                db.collection('mataMata').doc('config').get(),
+                db.collection('config').doc('config').get()
+            ]);
+            
+            data.teams = [];
+            teamsSnap.forEach(doc => data.teams.push({ id: doc.id, ...doc.data() }));
+            
+            data.matches = [];
+            matchesSnap.forEach(doc => data.matches.push({ id: doc.id, ...doc.data() }));
+            
+            data.scorers = [];
+            scorersSnap.forEach(doc => data.scorers.push({ id: doc.id, ...doc.data() }));
+            
+            data.cards = [];
+            cardsSnap.forEach(doc => data.cards.push({ id: doc.id, ...doc.data() }));
+            
+            if (mataMataSnap.exists) data.mataMata = mataMataSnap.data();
+            if (configSnap.exists) data.config = configSnap.data();
+            
+            setStatus('online', '✅ Dados carregados');
+            renderAllAdmin();
+            return true;
+        } catch (error) {
+            console.error('Erro ao carregar:', error);
+            setStatus('offline', '❌ Erro ao carregar');
+            alert('❌ Erro ao carregar: ' + error.message);
+            return false;
+        }
     }
 
     // ================================================================
@@ -954,9 +535,7 @@
         if (auth === 'true') {
             loginScreen.classList.add('hidden');
             adminPanel.classList.remove('hidden');
-            loadDataFromGitHub().then(() => {
-                renderAllAdmin();
-            });
+            loadDataFromFirebase();
         } else {
             loginScreen.classList.remove('hidden');
             adminPanel.classList.add('hidden');
@@ -990,6 +569,7 @@
         const cardTeam = document.getElementById('cardTeam');
         
         [home, away, scorerTeam, cardTeam].forEach(sel => {
+            if (!sel) return;
             sel.innerHTML = '';
             const defaultOpt = document.createElement('option');
             defaultOpt.value = '';
@@ -1003,15 +583,16 @@
             const opt = document.createElement('option');
             opt.value = t.id;
             opt.textContent = `${t.badge} - ${t.name} (${t.group || '?'})`;
-            home.appendChild(opt.cloneNode(true));
-            away.appendChild(opt.cloneNode(true));
-            scorerTeam.appendChild(opt.cloneNode(true));
-            cardTeam.appendChild(opt.cloneNode(true));
+            if (home) home.appendChild(opt.cloneNode(true));
+            if (away) away.appendChild(opt.cloneNode(true));
+            if (scorerTeam) scorerTeam.appendChild(opt.cloneNode(true));
+            if (cardTeam) cardTeam.appendChild(opt.cloneNode(true));
         });
     }
 
     function renderTeamChips() {
         const container = document.getElementById('teamList');
+        if (!container) return;
         container.innerHTML = '';
         data.teams.forEach(t => {
             const chip = document.createElement('span');
@@ -1027,6 +608,7 @@
 
     function renderMatchesTable() {
         const tbody = document.getElementById('matchesTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
         
         const sorted = [...data.matches].sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
@@ -1072,6 +654,7 @@
 
     function renderScorersTable() {
         const tbody = document.getElementById('scorersTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
         const sorted = [...data.scorers].sort((a, b) => b.goals - a.goals);
         sorted.forEach((s, idx) => {
@@ -1089,6 +672,7 @@
 
     function renderCardsAdmin() {
         const container = document.getElementById('cardsListAdmin');
+        if (!container) return;
         container.innerHTML = '';
         
         if (data.cards.length === 0) {
@@ -1113,47 +697,16 @@
         });
     }
 
-    function renderMataMataAdmin() {
-        const mm = data.mataMata;
-        if (!mm) return;
-        
-        ['quartas', 'semi', 'final'].forEach(fase => {
-            const container = document.getElementById(`${fase}Container`);
-            container.innerHTML = '';
-            
-            mm[fase].forEach((match, index) => {
-                const div = document.createElement('div');
-                div.className = 'mata-mata-match-admin';
-                const homeName = match.home ? getTeamName(match.home) : 'A definir';
-                const awayName = match.away ? getTeamName(match.away) : 'A definir';
-                const score = (match.homeGoals !== null && match.awayGoals !== null) ? `${match.homeGoals} x ${match.awayGoals}` : '— x —';
-                
-                div.innerHTML = `
-                    <div class="match-info">
-                        <span class="match-teams">${homeName} vs ${awayName}</span>
-                        <span class="match-score">${score}</span>
-                    </div>
-                    <div class="match-actions">
-                        <button class="btn btn-success btn-small" onclick="editMataMataMatch('${fase}', ${index})"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-small" onclick="removeMataMataMatch('${fase}', ${index})"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        });
-    }
-
     function renderAllAdmin() {
         populateSelects();
         renderTeamChips();
         renderMatchesTable();
         renderScorersTable();
         renderCardsAdmin();
-        renderMataMataAdmin();
     }
 
     // ================================================================
-    //  FUNÇÕES CRUD - TIMES
+    //  FUNÇÕES CRUD
     // ================================================================
     window.addTeam = async function() {
         const name = document.getElementById('teamName').value.trim();
@@ -1180,7 +733,7 @@
             group
         });
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             document.getElementById('teamName').value = '';
             document.getElementById('teamBadge').value = '';
@@ -1196,19 +749,12 @@
         data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
         data.cards = data.cards.filter(c => c.teamId !== id);
         
-        ['quartas', 'semi', 'final'].forEach(fase => {
-            data.mataMata[fase] = data.mataMata[fase].filter(m => m.home !== id && m.away !== id);
-        });
-        
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             alert('✅ Time removido!');
         }
     };
 
-    // ================================================================
-    //  FUNÇÕES CRUD - JOGOS
-    // ================================================================
     window.addMatch = async function(played = true) {
         const homeId = document.getElementById('matchHome').value;
         const awayId = document.getElementById('matchAway').value;
@@ -1249,7 +795,7 @@
             lastUpdate: played ? new Date().toISOString() : null
         });
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             document.getElementById('matchHomeGoals').value = '';
             document.getElementById('matchAwayGoals').value = '';
@@ -1282,7 +828,7 @@
             match.lastUpdate = new Date().toISOString();
         }
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
         }
     };
@@ -1302,7 +848,7 @@
             match.lastUpdate = null;
         }
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
         }
     };
@@ -1331,7 +877,7 @@
         match.awayGoals = parseInt(ag) || 0;
         match.lastUpdate = new Date().toISOString();
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             alert(`✅ Placar atualizado: ${getTeamName(match.homeTeamId)} ${match.homeGoals} x ${match.awayGoals} ${getTeamName(match.awayTeamId)}`);
         }
@@ -1341,14 +887,11 @@
         if (!confirm('Remover este jogo?')) return;
         
         data.matches = data.matches.filter(m => m.id !== id);
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
         }
     };
 
-    // ================================================================
-    //  FUNÇÕES CRUD - CARTÕES
-    // ================================================================
     window.addCard = async function() {
         const playerName = document.getElementById('cardPlayerName').value.trim();
         const teamId = document.getElementById('cardTeam').value;
@@ -1377,7 +920,7 @@
             matchId: null
         });
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             document.getElementById('cardPlayerName').value = '';
             document.getElementById('cardDatetime').value = '';
@@ -1389,14 +932,11 @@
         if (!confirm('Remover este cartão?')) return;
         
         data.cards = data.cards.filter(c => c.id !== id);
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
         }
     };
 
-    // ================================================================
-    //  FUNÇÕES CRUD - ARTILHEIROS
-    // ================================================================
     window.addScorer = async function() {
         const name = document.getElementById('scorerName').value.trim();
         const teamId = document.getElementById('scorerTeam').value;
@@ -1419,7 +959,7 @@
             });
         }
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             document.getElementById('scorerName').value = '';
             document.getElementById('scorerGoals').value = '0';
@@ -1431,163 +971,8 @@
         if (!confirm('Remover este artilheiro?')) return;
         
         data.scorers = data.scorers.filter(s => s.id !== id);
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
-        }
-    };
-
-    // ================================================================
-    //  FUNÇÕES MATA-MATA
-    // ================================================================
-    window.editMataMataMatch = function(fase, index) {
-        const match = data.mataMata[fase][index];
-        if (!match) {
-            alert('Jogo não encontrado!');
-            return;
-        }
-        
-        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        const teamOptions = teams.map(t => 
-            `<option value="${t.id}" ${match.home === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
-        ).join('');
-        const awayOptions = teams.map(t => 
-            `<option value="${t.id}" ${match.away === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
-        ).join('');
-        
-        const container = document.getElementById(`${fase}Container`);
-        const children = container.children;
-        
-        if (children[index]) {
-            const editDiv = document.createElement('div');
-            editDiv.className = 'edit-form';
-            editDiv.id = `edit-${fase}-${index}`;
-            editDiv.innerHTML = `
-                <h4 style="margin-bottom:12px;color:#2E7D32;">Editar Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
-                <div class="form-row">
-                    <label>Mandante
-                        <select id="editHomeTeam_${fase}_${index}">${teamOptions}</select>
-                    </label>
-                    <label>Visitante
-                        <select id="editAwayTeam_${fase}_${index}">${awayOptions}</select>
-                    </label>
-                    <label>Gols Mandante
-                        <input type="number" id="editHomeGoals_${fase}_${index}" value="${match.homeGoals !== null ? match.homeGoals : ''}" placeholder="—" />
-                    </label>
-                    <label>Gols Visitante
-                        <input type="number" id="editAwayGoals_${fase}_${index}" value="${match.awayGoals !== null ? match.awayGoals : ''}" placeholder="—" />
-                    </label>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-success" onclick="saveMataMataMatch('${fase}', ${index})"><i class="fas fa-save"></i> Salvar</button>
-                    <button class="btn btn-outline" onclick="renderAllAdmin()"><i class="fas fa-times"></i> Cancelar</button>
-                </div>
-            `;
-            children[index].replaceWith(editDiv);
-        }
-    };
-
-    window.saveMataMataMatch = async function(fase, index) {
-        const homeId = document.getElementById(`editHomeTeam_${fase}_${index}`).value;
-        const awayId = document.getElementById(`editAwayTeam_${fase}_${index}`).value;
-        const homeGoals = document.getElementById(`editHomeGoals_${fase}_${index}`).value;
-        const awayGoals = document.getElementById(`editAwayGoals_${fase}_${index}`).value;
-        
-        if (!homeId || !awayId) {
-            alert('Selecione os dois times!');
-            return;
-        }
-        if (homeId === awayId) {
-            alert('Os times devem ser diferentes!');
-            return;
-        }
-        
-        data.mataMata[fase][index] = {
-            home: homeId,
-            away: awayId,
-            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
-            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
-        };
-        
-        if (await saveDataToGitHub()) {
-            renderAllAdmin();
-            alert('✅ Jogo atualizado!');
-        }
-    };
-
-    window.removeMataMataMatch = async function(fase, index) {
-        if (!confirm(`Remover este jogo da ${fase}?`)) return;
-        
-        data.mataMata[fase].splice(index, 1);
-        if (await saveDataToGitHub()) {
-            renderAllAdmin();
-        }
-    };
-
-    function addMataMataMatch(fase) {
-        const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        if (teams.length < 2) {
-            alert('Adicione pelo menos 2 times primeiro!');
-            return;
-        }
-        
-        const teamOptions = teams.map(t => `<option value="${t.id}">${t.badge} - ${t.name}</option>`).join('');
-        const container = document.getElementById(`${fase}Container`);
-        
-        // Remove formulários anteriores
-        const existingForms = container.querySelectorAll('.edit-form');
-        existingForms.forEach(el => el.remove());
-        
-        const editDiv = document.createElement('div');
-        editDiv.className = 'edit-form';
-        editDiv.innerHTML = `
-            <h4 style="margin-bottom:12px;color:#2E7D32;">Novo Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
-            <div class="form-row">
-                <label>Mandante
-                    <select id="newHomeTeam_${fase}">${teamOptions}</select>
-                </label>
-                <label>Visitante
-                    <select id="newAwayTeam_${fase}">${teamOptions}</select>
-                </label>
-                <label>Gols Mandante
-                    <input type="number" id="newHomeGoals_${fase}" placeholder="—" />
-                </label>
-                <label>Gols Visitante
-                    <input type="number" id="newAwayGoals_${fase}" placeholder="—" />
-                </label>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-success" onclick="saveNewMataMataMatch('${fase}')"><i class="fas fa-save"></i> Adicionar</button>
-                <button class="btn btn-outline" onclick="renderAllAdmin()"><i class="fas fa-times"></i> Cancelar</button>
-            </div>
-        `;
-        container.appendChild(editDiv);
-    }
-
-    window.saveNewMataMataMatch = async function(fase) {
-        const homeId = document.getElementById(`newHomeTeam_${fase}`).value;
-        const awayId = document.getElementById(`newAwayTeam_${fase}`).value;
-        const homeGoals = document.getElementById(`newHomeGoals_${fase}`).value;
-        const awayGoals = document.getElementById(`newAwayGoals_${fase}`).value;
-        
-        if (!homeId || !awayId) {
-            alert('Selecione os dois times!');
-            return;
-        }
-        if (homeId === awayId) {
-            alert('Os times devem ser diferentes!');
-            return;
-        }
-        
-        data.mataMata[fase].push({
-            home: homeId,
-            away: awayId,
-            homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
-            awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
-        });
-        
-        if (await saveDataToGitHub()) {
-            renderAllAdmin();
-            alert('✅ Jogo adicionado!');
         }
     };
 
@@ -1599,20 +984,6 @@
     document.getElementById('addUpcomingBtn').addEventListener('click', () => window.addMatch(false));
     document.getElementById('addCardBtn').addEventListener('click', window.addCard);
     document.getElementById('addScorerBtn').addEventListener('click', window.addScorer);
-    
-    document.getElementById('addQuartasBtn').addEventListener('click', () => addMataMataMatch('quartas'));
-    document.getElementById('addSemiBtn').addEventListener('click', () => addMataMataMatch('semi'));
-    document.getElementById('addFinalBtn').addEventListener('click', () => addMataMataMatch('final'));
-
-    document.getElementById('resetMataMataBtn').addEventListener('click', async () => {
-        if (confirm('Resetar toda a fase mata-mata?')) {
-            data.mataMata = { quartas: [], semi: [], final: [] };
-            if (await saveDataToGitHub()) {
-                renderAllAdmin();
-                alert('✅ Mata-Mata resetado!');
-            }
-        }
-    });
 
     document.getElementById('simulateBtn').addEventListener('click', async () => {
         if (data.teams.length < 2) {
@@ -1648,7 +1019,7 @@
             });
         }
         
-        if (await saveDataToGitHub()) {
+        if (await saveDataToFirebase()) {
             renderAllAdmin();
             alert('✅ Rodada simulada!');
         }
@@ -1656,16 +1027,33 @@
 
     document.getElementById('resetBtn').addEventListener('click', async () => {
         if (confirm('Tem certeza? Todos os dados serão perdidos!')) {
-            data = getDefaultData();
-            if (await saveDataToGitHub()) {
-                renderAllAdmin();
-                alert('✅ Dados resetados!');
+            // Limpa todas as coleções
+            const collections = ['teams', 'matches', 'scorers', 'cards', 'mataMata', 'config'];
+            for (const col of collections) {
+                const snapshot = await db.collection(col).get();
+                const batch = db.batch();
+                snapshot.forEach(doc => batch.delete(doc.ref));
+                await batch.commit();
             }
+            
+            // Recria dados padrão
+            data = {
+                teams: [],
+                matches: [],
+                scorers: [],
+                cards: [],
+                mataMata: { quartas: [], semi: [], final: [] },
+                config: { prefeituraLogo: 'images/prefeitura.png', campeonatoNome: 'Campeonato Municipal', temporada: '2026' }
+            };
+            
+            await saveDataToFirebase();
+            renderAllAdmin();
+            alert('✅ Dados resetados!');
         }
     });
 
     document.getElementById('refreshBtn').addEventListener('click', async () => {
-        await loadDataFromGitHub();
+        await loadDataFromFirebase();
         renderAllAdmin();
         alert('✅ Dados recarregados!');
     });
@@ -1696,7 +1084,7 @@
                 const imported = JSON.parse(ev.target.result);
                 if (imported.teams && imported.matches !== undefined) {
                     data = imported;
-                    if (await saveDataToGitHub()) {
+                    if (await saveDataToFirebase()) {
                         renderAllAdmin();
                         alert('✅ Dados importados com sucesso!');
                     }
@@ -1712,16 +1100,46 @@
     });
 
     // ================================================================
+    //  ESCUTAR MUDANÇAS EM TEMPO REAL
+    // ================================================================
+    function setupRealtimeListeners() {
+        db.collection('teams').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+        db.collection('matches').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+        db.collection('scorers').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+        db.collection('cards').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+        db.collection('mataMata').doc('config').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+        db.collection('config').doc('config').onSnapshot(() => { 
+            if (!document.getElementById('adminPanel').classList.contains('hidden')) {
+                loadDataFromFirebase();
+            }
+        });
+    }
+
+    // ================================================================
     //  INICIALIZAÇÃO
     // ================================================================
     checkAuth();
-
-    // Atualiza a cada 60 segundos (só recarrega, não salva)
-    setInterval(async () => {
-        if (document.getElementById('adminPanel').classList.contains('hidden')) return;
-        await loadDataFromGitHub();
-        renderAllAdmin();
-    }, 60000);
+    setupRealtimeListeners();
 </script>
 </body>
 </html>

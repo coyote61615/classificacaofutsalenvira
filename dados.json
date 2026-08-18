@@ -1,0 +1,73 @@
+{
+  "teams": [
+    { "id": "t1", "name": "OBRAS", "badge": "OBR", "color": "#d62828", "logo": "images/obras.png", "group": "A" },
+    { "id": "t2", "name": "LIMOEIRO", "badge": "LIM", "color": "#1a7a3a", "logo": "images/limoeiro.png", "group": "A" },
+    { "id": "t3", "name": "BUJARU", "badge": "BUJ", "color": "#231f20", "logo": "images/bujaru.png", "group": "A" },
+    { "id": "t4", "name": "LUCRISCAR", "badge": "LUC", "color": "#c52b2b", "logo": "images/lucriscar.png", "group": "A" },
+    { "id": "t5", "name": "CRUZEIRO", "badge": "CRU", "color": "#000000", "logo": "images/cruzeiro.png", "group": "A" },
+    { "id": "t6", "name": "INDUSTRIAL", "badge": "IND", "color": "#e01a2f", "logo": "images/industrial.png", "group": "A" },
+    { "id": "t7", "name": "SHOUSE", "badge": "SHO", "color": "#8e44ad", "logo": "images/shouser.png", "group": "A" },
+    { "id": "t8", "name": "ESMAC", "badge": "ESM", "color": "#2980b9", "logo": "images/esmac.png", "group": "B" },
+    { "id": "t9", "name": "CLUBE DO REMO", "badge": "REM", "color": "#27ae60", "logo": "images/remo.png", "group": "B" },
+    { "id": "t10", "name": "INDEPENDENTE", "badge": "IND", "color": "#f39c12", "logo": "images/independente.png", "group": "B" },
+    { "id": "t11", "name": "ARFAS SOURE", "badge": "ARF", "color": "#8e44ad", "logo": "images/arfas.png", "group": "B" },
+    { "id": "t12", "name": "PAYSANDU", "badge": "PAY", "color": "#2c3e50", "logo": "images/paysandu.png", "group": "B" },
+    { "id": "t13", "name": "TUNA LUSO", "badge": "TUN", "color": "#d35400", "logo": "images/tuna.png", "group": "B" },
+    { "id": "t14", "name": "CASTANHAL", "badge": "CAS", "color": "#16a085", "logo": "images/castanhal.png", "group": "B" }
+  ],
+  "matches": [
+    { "id": "m1", "homeTeamId": "t1", "awayTeamId": "t2", "homeGoals": 3, "awayGoals": 1, "datetime": "2026-08-10T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m2", "homeTeamId": "t3", "awayTeamId": "t4", "homeGoals": 2, "awayGoals": 2, "datetime": "2026-08-10T18:30", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m3", "homeTeamId": "t5", "awayTeamId": "t6", "homeGoals": 4, "awayGoals": 1, "datetime": "2026-08-11T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m4", "homeTeamId": "t1", "awayTeamId": "t3", "homeGoals": 5, "awayGoals": 0, "datetime": "2026-08-13T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m5", "homeTeamId": "t2", "awayTeamId": "t5", "homeGoals": 2, "awayGoals": 0, "datetime": "2026-08-13T18:30", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m6", "homeTeamId": "t4", "awayTeamId": "t6", "homeGoals": 3, "awayGoals": 1, "datetime": "2026-08-14T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m7", "homeTeamId": "t1", "awayTeamId": "t4", "homeGoals": 4, "awayGoals": 0, "datetime": "2026-08-16T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m8", "homeTeamId": "t2", "awayTeamId": "t6", "homeGoals": 6, "awayGoals": 2, "datetime": "2026-08-16T18:30", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m9", "homeTeamId": "t3", "awayTeamId": "t5", "homeGoals": 3, "awayGoals": 1, "datetime": "2026-08-17T16:00", "venue": "Estádio A", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m10", "homeTeamId": "t8", "awayTeamId": "t9", "homeGoals": 4, "awayGoals": 1, "datetime": "2026-08-10T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m11", "homeTeamId": "t10", "awayTeamId": "t11", "homeGoals": 1, "awayGoals": 1, "datetime": "2026-08-10T18:30", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m12", "homeTeamId": "t12", "awayTeamId": "t13", "homeGoals": 3, "awayGoals": 0, "datetime": "2026-08-11T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m13", "homeTeamId": "t8", "awayTeamId": "t10", "homeGoals": 5, "awayGoals": 0, "datetime": "2026-08-13T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m14", "homeTeamId": "t9", "awayTeamId": "t12", "homeGoals": 2, "awayGoals": 0, "datetime": "2026-08-13T18:30", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m15", "homeTeamId": "t11", "awayTeamId": "t13", "homeGoals": 3, "awayGoals": 2, "datetime": "2026-08-14T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m16", "homeTeamId": "t8", "awayTeamId": "t11", "homeGoals": 6, "awayGoals": 1, "datetime": "2026-08-16T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m17", "homeTeamId": "t9", "awayTeamId": "t13", "homeGoals": 4, "awayGoals": 1, "datetime": "2026-08-16T18:30", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null },
+    { "id": "m18", "homeTeamId": "t10", "awayTeamId": "t12", "homeGoals": 2, "awayGoals": 1, "datetime": "2026-08-17T16:00", "venue": "Estádio B", "played": true, "live": false, "lastUpdate": null }
+  ],
+  "scorers": [
+    { "id": "s1", "playerName": "Joãozinho", "teamId": "t1", "goals": 8 },
+    { "id": "s2", "playerName": "Carlos", "teamId": "t8", "goals": 7 },
+    { "id": "s3", "playerName": "Pedro", "teamId": "t2", "goals": 6 },
+    { "id": "s4", "playerName": "Lucas", "teamId": "t9", "goals": 5 },
+    { "id": "s5", "playerName": "Rafael", "teamId": "t3", "goals": 4 }
+  ],
+  "cards": [
+    { "id": "c1", "playerName": "Marcos", "teamId": "t1", "type": "amarelo", "matchId": null, "datetime": "2026-08-10T16:15" },
+    { "id": "c2", "playerName": "Anderson", "teamId": "t2", "type": "vermelho", "matchId": null, "datetime": "2026-08-10T16:30" },
+    { "id": "c3", "playerName": "Rafael", "teamId": "t3", "type": "amarelo", "matchId": null, "datetime": "2026-08-10T18:45" },
+    { "id": "c4", "playerName": "Paulo", "teamId": "t8", "type": "amarelo", "matchId": null, "datetime": "2026-08-10T16:20" },
+    { "id": "c5", "playerName": "Thiago", "teamId": "t9", "type": "vermelho", "matchId": null, "datetime": "2026-08-10T16:35" }
+  ],
+  "mataMata": {
+    "quartas": [
+      { "home": "t1", "away": "t14", "homeGoals": null, "awayGoals": null },
+      { "home": "t8", "away": "t7", "homeGoals": null, "awayGoals": null },
+      { "home": "t2", "away": "t13", "homeGoals": null, "awayGoals": null },
+      { "home": "t9", "away": "t6", "homeGoals": null, "awayGoals": null }
+    ],
+    "semi": [
+      { "home": null, "away": null, "homeGoals": null, "awayGoals": null },
+      { "home": null, "away": null, "homeGoals": null, "awayGoals": null }
+    ],
+    "final": [
+      { "home": null, "away": null, "homeGoals": null, "awayGoals": null }
+    ]
+  },
+  "config": {
+    "prefeituraLogo": "images/prefeitura.png",
+    "campeonatoNome": "Campeonato Municipal",
+    "temporada": "2026"
+  },
+  "lastUpdate": "2026-01-01T00:00:00.000Z"
+}

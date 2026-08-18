@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ===== BASE ===== */
+        /* ===== ESTILO COMPLETO (mesmo do admin anterior) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -223,6 +223,20 @@
         .btn-mata-mata:hover {
             background: #d35400;
         }
+        .btn-card-amarelo {
+            background: #f39c12;
+            color: #fff;
+        }
+        .btn-card-amarelo:hover {
+            background: #d68910;
+        }
+        .btn-card-vermelho {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-card-vermelho:hover {
+            background: #c0392b;
+        }
         .chip-list {
             display: flex;
             flex-wrap: wrap;
@@ -290,19 +304,9 @@
         .live-badge.active {
             background: #2ecc71;
         }
-        .status-pendente {
-            color: #f39c12;
-            font-weight: 600;
-        }
-        .status-realizado {
-            color: #27ae60;
-            font-weight: 600;
-        }
-        .status-ao-vivo {
-            color: #e74c3c;
-            font-weight: 600;
-            animation: pulse 1.5s infinite;
-        }
+        .status-pendente { color: #f39c12; font-weight: 600; }
+        .status-realizado { color: #27ae60; font-weight: 600; }
+        .status-ao-vivo { color: #e74c3c; font-weight: 600; animation: pulse 1.5s infinite; }
         .mata-mata-match-admin {
             background: #f8fdf9;
             border-radius: 12px;
@@ -321,9 +325,7 @@
             gap: 16px;
             flex-wrap: wrap;
         }
-        .mata-mata-match-admin .match-teams {
-            font-weight: 600;
-        }
+        .mata-mata-match-admin .match-teams { font-weight: 600; }
         .mata-mata-match-admin .match-score {
             font-weight: 700;
             color: #e67e22;
@@ -345,6 +347,40 @@
             font-size: 0.85rem;
             display: inline-block;
             margin-bottom: 12px;
+        }
+        .card-item-admin {
+            background: #f8fdf9;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-left: 4px solid #f39c12;
+        }
+        .card-item-admin .card-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .card-item-admin .card-type {
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+        }
+        .card-item-admin .card-type.amarillo {
+            background: #FFF8E1;
+            color: #f39c12;
+            border: 1px solid #f39c12;
+        }
+        .card-item-admin .card-type.vermelho {
+            background: #FFEBEE;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
         }
         @keyframes pulse {
             0% { opacity: 1; }
@@ -444,42 +480,49 @@
             </div>
         </div>
 
-        <!-- ===== NOVO: MATA-MATA ===== -->
+        <!-- ===== MATA-MATA ===== -->
         <div class="card" style="border-top-color:#e67e22;">
             <div class="card-title"><i class="fas fa-flag-checkered" style="color:#e67e22;"></i> Fase Mata-Mata</div>
-            <p style="color:#6c7a8a; margin-bottom:16px; font-size:0.9rem;">
-                <i class="fas fa-info-circle"></i> Selecione os times e insira os placares de cada fase.
-            </p>
-            
-            <!-- Quartas de Final -->
             <div style="margin-bottom:24px;">
                 <div class="mata-mata-round-title">🏆 Quartas de Final</div>
                 <div id="quartasContainer"></div>
-                <button class="btn btn-mata-mata" id="addQuartasBtn" style="margin-top:8px;">
-                    <i class="fas fa-plus"></i> Adicionar Jogo às Quartas
-                </button>
+                <button class="btn btn-mata-mata" id="addQuartasBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
-
-            <!-- Semifinais -->
             <div style="margin-bottom:24px;">
                 <div class="mata-mata-round-title">🏆 Semifinais</div>
                 <div id="semiContainer"></div>
-                <button class="btn btn-mata-mata" id="addSemiBtn" style="margin-top:8px;">
-                    <i class="fas fa-plus"></i> Adicionar Jogo à Semifinal
-                </button>
+                <button class="btn btn-mata-mata" id="addSemiBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
-
-            <!-- Final -->
             <div style="margin-bottom:16px;">
                 <div class="mata-mata-round-title" style="background:#FFC107;color:#333;">🏆 Final</div>
                 <div id="finalContainer"></div>
-                <button class="btn btn-mata-mata" id="addFinalBtn" style="margin-top:8px;">
-                    <i class="fas fa-plus"></i> Adicionar Jogo à Final
-                </button>
+                <button class="btn btn-mata-mata" id="addFinalBtn" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar Jogo</button>
             </div>
-
             <div class="form-actions" style="margin-top:12px; border-top:1px solid #e9ecef; padding-top:16px;">
                 <button class="btn btn-danger" id="resetMataMataBtn"><i class="fas fa-undo-alt"></i> Resetar Mata-Mata</button>
+            </div>
+        </div>
+
+        <!-- ===== CARTÕES ===== -->
+        <div class="card" style="border-top-color:#f39c12;">
+            <div class="card-title"><i class="fas fa-card" style="color:#f39c12;"></i> Gerenciar Cartões</div>
+            <div class="form-grid">
+                <label>Jogador <input type="text" id="cardPlayerName" placeholder="Nome do jogador" /></label>
+                <label>Time <select id="cardTeam"></select></label>
+                <label>Tipo de Cartão 
+                    <select id="cardType">
+                        <option value="amarelo">🟨 Amarelo</option>
+                        <option value="vermelho">🟥 Vermelho</option>
+                    </select>
+                </label>
+                <label>Data/Hora <input type="datetime-local" id="cardDatetime" /></label>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-card-amarelo" id="addCardBtn"><i class="fas fa-plus"></i> Adicionar Cartão</button>
+            </div>
+            <div style="margin-top:16px;">
+                <h4 style="color:#2E7D32; margin-bottom:12px;">📋 Registro de Cartões</h4>
+                <div id="cardsListAdmin"></div>
             </div>
         </div>
 
@@ -563,6 +606,13 @@
                 { id: 's4', playerName: 'Lucas', teamId: 't9', goals: 5 },
                 { id: 's5', playerName: 'Rafael', teamId: 't3', goals: 4 },
             ],
+            cards: [
+                { id: 'c1', playerName: 'Marcos', teamId: 't1', type: 'amarelo', matchId: 'm1', datetime: '2026-08-10T16:15' },
+                { id: 'c2', playerName: 'Anderson', teamId: 't2', type: 'vermelho', matchId: 'm1', datetime: '2026-08-10T16:30' },
+                { id: 'c3', playerName: 'Rafael', teamId: 't3', type: 'amarelo', matchId: 'm2', datetime: '2026-08-10T18:45' },
+                { id: 'c4', playerName: 'Paulo', teamId: 't8', type: 'amarelo', matchId: 'm10', datetime: '2026-08-10T16:20' },
+                { id: 'c5', playerName: 'Thiago', teamId: 't9', type: 'vermelho', matchId: 'm10', datetime: '2026-08-10T16:35' },
+            ],
             prefeituraLogo: 'images/prefeitura.png',
             mataMata: {
                 quartas: [
@@ -590,6 +640,7 @@
                 if (!data.teams) data.teams = [];
                 if (!data.matches) data.matches = [];
                 if (!data.scorers) data.scorers = [];
+                if (!data.cards) data.cards = [];
                 if (!data.mataMata) data.mataMata = getDefaultData().mataMata;
                 return data;
             } catch (e) { return getDefaultData(); }
@@ -607,7 +658,6 @@
     //  AUXILIARES
     // ================================================================
     function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
-
     function getTeam(id) { return data.teams.find(t => t.id === id); }
     function getTeamName(id) { const t = getTeam(id); return t ? t.name : '?'; }
     function getTeamBadge(id) { const t = getTeam(id); return t ? t.badge : '?'; }
@@ -683,7 +733,8 @@
         const home = document.getElementById('matchHome');
         const away = document.getElementById('matchAway');
         const scorerTeam = document.getElementById('scorerTeam');
-        [home, away, scorerTeam].forEach(sel => { sel.innerHTML = ''; });
+        const cardTeam = document.getElementById('cardTeam');
+        [home, away, scorerTeam, cardTeam].forEach(sel => { sel.innerHTML = ''; });
         data.teams.forEach(t => {
             const opt = document.createElement('option');
             opt.value = t.id;
@@ -691,6 +742,7 @@
             home.appendChild(opt.cloneNode(true));
             away.appendChild(opt.cloneNode(true));
             scorerTeam.appendChild(opt.cloneNode(true));
+            cardTeam.appendChild(opt.cloneNode(true));
         });
     }
 
@@ -713,7 +765,7 @@
                 if (confirm('Remover este time?')) {
                     data.teams = data.teams.filter(t => t.id !== id);
                     data.matches = data.matches.filter(m => m.homeTeamId !== id && m.awayTeamId !== id);
-                    // Remove do mata-mata também
+                    data.cards = data.cards.filter(c => c.teamId !== id);
                     ['quartas', 'semi', 'final'].forEach(fase => {
                         data.mataMata[fase] = data.mataMata[fase].filter(m => m.home !== id && m.away !== id);
                     });
@@ -730,10 +782,7 @@
         const sorted = [...data.matches].sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
         sorted.forEach(m => {
             const tr = document.createElement('tr');
-            const home = getTeamName(m.homeTeamId);
-            const away = getTeamName(m.awayTeamId);
-            let score = '—';
-            let statusText = '', statusClass = '';
+            let score = '—', statusText = '', statusClass = '';
             if (m.played) {
                 score = `${m.homeGoals||0} x ${m.awayGoals||0}`;
                 if (m.live) { statusText = '🔴 AO VIVO'; statusClass = 'status-ao-vivo'; }
@@ -745,7 +794,7 @@
             const liveBadge = m.live ? '<span class="live-badge active"><i class="fas fa-circle"></i> AO VIVO</span>' : '<span class="live-badge">OFF</span>';
             const updateBtn = m.live ? `<button class="btn btn-amarelo" style="padding:4px 12px;font-size:0.7rem;" onclick="updateLiveScore('${m.id}')"><i class="fas fa-sync-alt"></i></button>` : '';
             tr.innerHTML = `
-                <td>${home}</td><td>${away}</td>
+                <td>${getTeamName(m.homeTeamId)}</td><td>${getTeamName(m.awayTeamId)}</td>
                 <td><strong>${score}</strong></td>
                 <td>${formatDate(m.datetime)}</td>
                 <td>${m.venue || '—'}</td>
@@ -779,58 +828,57 @@
         });
     }
 
-    // ================================================================
-    //  RENDER MATA-MATA ADMIN
-    // ================================================================
-    function renderMataMataAdmin() {
-        const mm = data.mataMata;
-        if (!mm) return;
-
-        // Quartas
-        const quartasContainer = document.getElementById('quartasContainer');
-        quartasContainer.innerHTML = '';
-        mm.quartas.forEach((match, index) => {
-            quartasContainer.appendChild(createMataMataMatchElement(match, 'quartas', index));
-        });
-
-        // Semi
-        const semiContainer = document.getElementById('semiContainer');
-        semiContainer.innerHTML = '';
-        mm.semi.forEach((match, index) => {
-            semiContainer.appendChild(createMataMataMatchElement(match, 'semi', index));
-        });
-
-        // Final
-        const finalContainer = document.getElementById('finalContainer');
-        finalContainer.innerHTML = '';
-        mm.final.forEach((match, index) => {
-            finalContainer.appendChild(createMataMataMatchElement(match, 'final', index));
+    // ===== RENDER CARTÕES ADMIN =====
+    function renderCardsAdmin() {
+        const container = document.getElementById('cardsListAdmin');
+        container.innerHTML = '';
+        if (data.cards.length === 0) {
+            container.innerHTML = '<p style="color:#6c7a8a;padding:12px 0;">Nenhum cartão registrado.</p>';
+            return;
+        }
+        const sorted = [...data.cards].sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
+        sorted.forEach(card => {
+            const div = document.createElement('div');
+            div.className = 'card-item-admin';
+            div.innerHTML = `
+                <div class="card-info">
+                    <span style="font-weight:600;">${card.playerName}</span>
+                    <span style="color:#6c7a8a;font-size:0.85rem;">(${getTeamName(card.teamId)})</span>
+                    <span class="card-type ${card.type}">${card.type === 'amarelo' ? '🟨 Amarelo' : '🟥 Vermelho'}</span>
+                    <span style="font-size:0.75rem;color:#6c7a8a;"><i class="far fa-calendar-alt"></i> ${formatDate(card.datetime)}</span>
+                </div>
+                <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="deleteCard('${card.id}')">✕</button>
+            `;
+            container.appendChild(div);
         });
     }
 
-    function createMataMataMatchElement(match, fase, index) {
-        const div = document.createElement('div');
-        div.className = 'mata-mata-match-admin';
-        const homeName = match.home ? getTeamName(match.home) : 'A definir';
-        const awayName = match.away ? getTeamName(match.away) : 'A definir';
-        const score = (match.homeGoals !== null && match.awayGoals !== null) ? 
-            `${match.homeGoals} x ${match.awayGoals}` : '— x —';
-
-        div.innerHTML = `
-            <div class="match-info">
-                <span class="match-teams">${homeName} vs ${awayName}</span>
-                <span class="match-score">${score}</span>
-            </div>
-            <div class="match-actions">
-                <button class="btn btn-success" style="padding:4px 12px;font-size:0.7rem;" onclick="editMataMataMatch('${fase}', ${index})">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="removeMataMataMatch('${fase}', ${index})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-        return div;
+    // ===== RENDER MATA-MATA ADMIN =====
+    function renderMataMataAdmin() {
+        const mm = data.mataMata;
+        if (!mm) return;
+        ['quartas', 'semi', 'final'].forEach(fase => {
+            const container = document.getElementById(`${fase}Container`);
+            container.innerHTML = '';
+            mm[fase].forEach((match, index) => {
+                const div = document.createElement('div');
+                div.className = 'mata-mata-match-admin';
+                const homeName = match.home ? getTeamName(match.home) : 'A definir';
+                const awayName = match.away ? getTeamName(match.away) : 'A definir';
+                const score = (match.homeGoals !== null && match.awayGoals !== null) ? `${match.homeGoals} x ${match.awayGoals}` : '— x —';
+                div.innerHTML = `
+                    <div class="match-info">
+                        <span class="match-teams">${homeName} vs ${awayName}</span>
+                        <span class="match-score">${score}</span>
+                    </div>
+                    <div class="match-actions">
+                        <button class="btn btn-success" style="padding:4px 12px;font-size:0.7rem;" onclick="editMataMataMatch('${fase}', ${index})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" style="padding:4px 12px;font-size:0.7rem;" onclick="removeMataMataMatch('${fase}', ${index})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        });
     }
 
     // ================================================================
@@ -839,30 +887,16 @@
     window.editMataMataMatch = function(fase, index) {
         const match = data.mataMata[fase][index];
         if (!match) { alert('Jogo não encontrado!'); return; }
-
         const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        const teamOptions = teams.map(t => 
-            `<option value="${t.id}" ${match.home === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
-        ).join('');
-
-        const awayOptions = teams.map(t => 
-            `<option value="${t.id}" ${match.away === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`
-        ).join('');
-
+        const teamOptions = teams.map(t => `<option value="${t.id}" ${match.home === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`).join('');
+        const awayOptions = teams.map(t => `<option value="${t.id}" ${match.away === t.id ? 'selected' : ''}>${t.badge} - ${t.name}</option>`).join('');
         const html = `
             <div style="background:#f8fdf9;padding:16px;border-radius:12px;margin:8px 0;border:2px solid #e67e22;">
                 <h4 style="margin-bottom:12px;color:#2E7D32;">Editar Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Mandante</label>
-                        <select id="editHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select>
-                    </div>
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Visitante</label>
-                        <select id="editAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${awayOptions}</select>
-                    </div>
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Mandante</label><select id="editHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Visitante</label><select id="editAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${awayOptions}</select></div>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
                         <div style="display:flex;gap:8px;">
                             <input type="number" id="editHomeGoals" placeholder="Gols" value="${match.homeGoals !== null ? match.homeGoals : ''}" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
                             <input type="number" id="editAwayGoals" placeholder="Gols" value="${match.awayGoals !== null ? match.awayGoals : ''}" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
@@ -875,8 +909,6 @@
                 </div>
             </div>
         `;
-
-        // Substitui o elemento atual pelo formulário de edição
         const container = document.getElementById(`${fase}Container`);
         const children = container.children;
         if (children[index]) {
@@ -891,32 +923,20 @@
         const awayId = document.getElementById('editAwayTeam').value;
         const homeGoals = document.getElementById('editHomeGoals').value;
         const awayGoals = document.getElementById('editAwayGoals').value;
-
-        if (!homeId || !awayId) {
-            alert('Selecione os dois times!');
-            return;
-        }
-        if (homeId === awayId) {
-            alert('Os times devem ser diferentes!');
-            return;
-        }
-
+        if (!homeId || !awayId) { alert('Selecione os dois times!'); return; }
+        if (homeId === awayId) { alert('Os times devem ser diferentes!'); return; }
         data.mataMata[fase][index] = {
             home: homeId,
             away: awayId,
             homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
             awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
         };
-
         saveData(data);
         renderAllAdmin();
         window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
     };
 
-    window.cancelEditMataMata = function() {
-        renderAllAdmin();
-    };
-
+    window.cancelEditMataMata = function() { renderAllAdmin(); };
     window.removeMataMataMatch = function(fase, index) {
         if (confirm(`Remover este jogo da ${fase}?`)) {
             data.mataMata[fase].splice(index, 1);
@@ -928,27 +948,15 @@
 
     function addMataMataMatch(fase) {
         const teams = data.teams.map(t => ({ id: t.id, name: t.name, badge: t.badge }));
-        if (teams.length < 2) {
-            alert('Adicione pelo menos 2 times primeiro!');
-            return;
-        }
-
+        if (teams.length < 2) { alert('Adicione pelo menos 2 times primeiro!'); return; }
         const teamOptions = teams.map(t => `<option value="${t.id}">${t.badge} - ${t.name}</option>`).join('');
-        
         const html = `
             <div style="background:#f8fdf9;padding:16px;border-radius:12px;margin:8px 0;border:2px solid #e67e22;">
                 <h4 style="margin-bottom:12px;color:#2E7D32;">Novo Jogo - ${fase.charAt(0).toUpperCase() + fase.slice(1)}</h4>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Mandante</label>
-                        <select id="newHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select>
-                    </div>
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Visitante</label>
-                        <select id="newAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select>
-                    </div>
-                    <div>
-                        <label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Mandante</label><select id="newHomeTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Visitante</label><select id="newAwayTeam" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">${teamOptions}</select></div>
+                    <div><label style="font-size:0.8rem;font-weight:600;">Placar (opcional)</label>
                         <div style="display:flex;gap:8px;">
                             <input type="number" id="newHomeGoals" placeholder="Gols" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
                             <input type="number" id="newAwayGoals" placeholder="Gols" style="width:50%;padding:8px;border-radius:8px;border:1px solid #ddd;" />
@@ -961,12 +969,9 @@
                 </div>
             </div>
         `;
-
         const container = document.getElementById(`${fase}Container`);
-        // Remove formulários anteriores
         const existingForms = container.querySelectorAll('div[style*="border:2px solid #e67e22;"]');
         existingForms.forEach(el => el.remove());
-
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
         container.appendChild(tempDiv.firstElementChild);
@@ -977,34 +982,22 @@
         const awayId = document.getElementById('newAwayTeam').value;
         const homeGoals = document.getElementById('newHomeGoals').value;
         const awayGoals = document.getElementById('newAwayGoals').value;
-
-        if (!homeId || !awayId) {
-            alert('Selecione os dois times!');
-            return;
-        }
-        if (homeId === awayId) {
-            alert('Os times devem ser diferentes!');
-            return;
-        }
-
+        if (!homeId || !awayId) { alert('Selecione os dois times!'); return; }
+        if (homeId === awayId) { alert('Os times devem ser diferentes!'); return; }
         data.mataMata[fase].push({
             home: homeId,
             away: awayId,
             homeGoals: homeGoals !== '' ? parseInt(homeGoals) : null,
             awayGoals: awayGoals !== '' ? parseInt(awayGoals) : null
         });
-
         saveData(data);
         renderAllAdmin();
         window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
     };
 
-    // Botões para adicionar jogos
     document.getElementById('addQuartasBtn').addEventListener('click', () => addMataMataMatch('quartas'));
     document.getElementById('addSemiBtn').addEventListener('click', () => addMataMataMatch('semi'));
     document.getElementById('addFinalBtn').addEventListener('click', () => addMataMataMatch('final'));
-
-    // Resetar Mata-Mata
     document.getElementById('resetMataMataBtn').addEventListener('click', () => {
         if (confirm('Resetar toda a fase mata-mata?')) {
             data.mataMata = { quartas: [], semi: [], final: [] };
@@ -1013,6 +1006,42 @@
             window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
         }
     });
+
+    // ================================================================
+    //  FUNÇÕES CARTÕES ADMIN
+    // ================================================================
+    document.getElementById('addCardBtn').addEventListener('click', () => {
+        const playerName = document.getElementById('cardPlayerName').value.trim();
+        const teamId = document.getElementById('cardTeam').value;
+        const type = document.getElementById('cardType').value;
+        const datetime = document.getElementById('cardDatetime').value;
+        if (!playerName) { alert('Digite o nome do jogador!'); return; }
+        if (!teamId) { alert('Selecione o time!'); return; }
+        if (!datetime) { alert('Selecione a data/hora do cartão!'); return; }
+        data.cards.push({
+            id: generateId(),
+            playerName,
+            teamId,
+            type,
+            datetime,
+            matchId: null
+        });
+        saveData(data);
+        document.getElementById('cardPlayerName').value = '';
+        document.getElementById('cardDatetime').value = '';
+        renderAllAdmin();
+        window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+        alert('✅ Cartão adicionado com sucesso!');
+    });
+
+    window.deleteCard = function(id) {
+        if (confirm('Remover este cartão?')) {
+            data.cards = data.cards.filter(c => c.id !== id);
+            saveData(data);
+            renderAllAdmin();
+            window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
+        }
+    };
 
     // ================================================================
     //  AÇÕES ADMIN (expondo globalmente)
@@ -1226,6 +1255,7 @@
         renderMatchesTable();
         renderScorersTable();
         renderMataMataAdmin();
+        renderCardsAdmin();
     }
 
     // ================================================================
